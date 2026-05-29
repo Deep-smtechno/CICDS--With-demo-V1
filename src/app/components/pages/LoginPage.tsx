@@ -55,10 +55,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           </p>
           <div className="flex items-center gap-4 text-sm text-slate-400">
             <span className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-emerald-400" /> End-to-End Encrypted
+              <Lock className="w-4 h-4 text-emerald-400" /> Secure Access
             </span>
-            <span className="w-1 h-1 bg-slate-500 rounded-full" />
-            <span>Govt. Intranet Secure</span>
           </div>
         </div>
       </div>
