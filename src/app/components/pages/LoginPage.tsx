@@ -18,7 +18,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-    
+
     // Simulate slight network delay for premium feel
     setTimeout(() => {
       // Note: Keep credentials as requested
@@ -42,11 +42,11 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
         <div className="relative z-10 p-16 flex flex-col items-center justify-center h-full max-w-2xl text-center w-full">
           <img src="/Gujarat_Police_Logo.png" alt="Gujarat Police Logo" className="w-60 h-60 object-contain drop-shadow-2xl mb-8" />
-          
+
           <h1 className="text-4xl sm:text-5xl font-normal text-white tracking-wide mb-1">
             State Monitoring Cell
           </h1>
-          
+
           <div className="flex items-center justify-center w-full max-w-md mx-auto gap-4 mb-12">
             <div className="h-[6px] bg-white flex-grow"></div>
             <span className="text-2xl sm:text-3xl font-medium text-white whitespace-nowrap">Gujarat Police</span>
@@ -54,7 +54,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           </div>
 
           <p className="text-lg text-[#EFF6FF] leading-relaxed mb-12 max-w-lg opacity-90">
-            Advanced analytics, real-time tracking, and strategic monitoring for unified crime intelligence. Secure access restricted to authorized personnel only.
+            Advanced analytics, real-time tracking, and strategic monitoring for unified crime intelligence. Secure access to authorized personnel only.
           </p>
           <div className="flex items-center gap-4 text-sm text-[#EFF6FF] opacity-80">
             <span className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       {/* Form Right Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-24 bg-[#FFFFFF] relative shadow-[0_0_50px_rgba(0,0,0,0.05)] z-10">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")' }} />
-        
+
         <div className="w-full max-w-md relative z-10">
           <div className="lg:hidden flex flex-col items-center justify-center mb-10 w-full">
             <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-24 h-24 mb-4 object-contain" />
@@ -80,7 +80,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               <div className="h-1.5 bg-[#1E3A8A] flex-grow"></div>
             </div>
           </div>
-          
+
           <div className="text-center lg:text-left mb-10">
             <h2 className="text-3xl font-bold text-[#1E3A8A] tracking-tight mb-3">Welcome Back</h2>
             <p className="text-[#6B7280]">Sign in to access the State Monitioring Cell dashboard</p>
@@ -133,8 +133,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               </div>
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isLoading}
               className="w-full h-14 bg-[#1D4ED8] hover:bg-[#1E40AF] text-[#FFFFFF] rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#1D4ED8]/25 flex items-center justify-center gap-2 group relative overflow-hidden mt-8"
             >
@@ -147,9 +147,9 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </>
               )}
             </Button>
-            
+
             <p className="text-center text-xs text-[#6B7280] font-medium pt-8">
-              Design & Devloped by SM Techno Consultants Private Limited <br/>
+              Design & Devloped by SM Techno Consultants Private Limited <br />
             </p>
           </form>
         </div>
