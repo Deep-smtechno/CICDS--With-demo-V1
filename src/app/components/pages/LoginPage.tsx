@@ -35,7 +35,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2 text-left">
-              <Label htmlFor="email" className="text-slate-700 font-medium">Email / Investigator ID</Label>
+              <Label htmlFor="email" className="text-slate-700 font-medium">Email</Label>
               <Input
                 id="email"
                 type="text"
