@@ -263,6 +263,39 @@ const bootleggers = [
   },
 ];
 
+const ndpsAccused = [
+  {
+    no: 1,
+    dist: "Ahmedabad",
+    ps: "Vastrapur",
+    name: "Sajid Khan",
+    addr: "Vastrapur",
+    caste: "—",
+    crimes: 3,
+    arrest: "2026-03-15",
+    seizureValue: "₹15.2 લાખ",
+    drugsSeized: "150 G",
+    risk: "high",
+    repeat: true,
+    interstate: true,
+  },
+  {
+    no: 2,
+    dist: "Surat",
+    ps: "Adajan",
+    name: "Raju Bhai",
+    addr: "Adajan",
+    caste: "—",
+    crimes: 1,
+    arrest: "2026-04-10",
+    seizureValue: "₹5.8 લાખ",
+    drugsSeized: "50 G",
+    risk: "medium",
+    repeat: false,
+    interstate: false,
+  },
+];
+
 const trend12 = (seed: number, base = 200, jitter = 80) => {
   const r = rand(seed);
   return months.map((m, i) => ({
@@ -426,6 +459,7 @@ export function UnifiedDashboard() {
   const [drillTab, setDrillTab] = useState("overview");
   const [tableQuery, setTableQuery] = useState("");
   const [tablePage, setTablePage] = useState(1);
+  const [masterType, setMasterType] = useState<"bootlegger" | "ndps">("bootlegger");
   const [selectedDistrict, setSelectedDistrict] = useState<
     string | null
   >(null);
@@ -1654,38 +1688,54 @@ export function UnifiedDashboard() {
         </div>
       </section>
 
-      {/* Bootlegger Master Analytics */}
+      {/* Master Analytics */}
       <Panel
-        title="Bootlegger Master Analytics"
+        title={masterType === "bootlegger" ? "Bootlegger Master Analytics" : "NDPS Master Analytics"}
         action={
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2 w-4 h-4 text-[#6B7280]" />
-              <Input
-                value={tableQuery}
-                onChange={(e) => {
-                  setTableQuery(e.target.value);
-                  setTablePage(1);
-                }}
-                placeholder="Search bootlegger…"
-                className="pl-8 h-8 w-56 bg-[#F9FAFB] border-[#E5E7EB] text-[13px]"
-              />
+          <div className="flex items-center gap-4">
+            <Tabs value={masterType} onValueChange={(val: any) => { setMasterType(val); setTablePage(1); }} className="w-[180px]">
+              <TabsList className="grid w-full grid-cols-2 h-8 p-0.5">
+                <TabsTrigger value="bootlegger" className="text-[12px] h-6">Bootlegger</TabsTrigger>
+                <TabsTrigger value="ndps" className="text-[12px] h-6">NDPS</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2 w-4 h-4 text-[#6B7280]" />
+                <Input
+                  value={tableQuery}
+                  onChange={(e) => {
+                    setTableQuery(e.target.value);
+                    setTablePage(1);
+                  }}
+                  placeholder={masterType === "bootlegger" ? "Search bootlegger…" : "Search NDPS accused…"}
+                  className="pl-8 h-8 w-56 bg-[#F9FAFB] border-[#E5E7EB] text-[13px]"
+                />
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5"
+              >
+                <Download className="w-3.5 h-3.5" /> Export
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 gap-1.5"
-            >
-              <Download className="w-3.5 h-3.5" /> Export
-            </Button>
           </div>
         }
       >
-        <BootleggerTable
-          query={tableQuery}
-          page={tablePage}
-          setPage={setTablePage}
-        />
+        {masterType === "bootlegger" ? (
+          <BootleggerTable
+            query={tableQuery}
+            page={tablePage}
+            setPage={setTablePage}
+          />
+        ) : (
+          <NDPSTable
+            query={tableQuery}
+            page={tablePage}
+            setPage={setTablePage}
+          />
+        )}
       </Panel>
 
       {/* Drill-down workspace */}
@@ -2487,6 +2537,146 @@ function BootleggerTable({
                 </TableCell>
                 <TableCell className="font-medium text-[#1D4ED8]">
                   {b.liquorSeized}
+                </TableCell>
+                <TableCell className="text-[#6B7280]">
+                  {b.arrest}
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {b.repeat && (
+                      <Badge className="bg-[#FEF2F2] text-[#DC2626] hover:bg-[#FEF2F2]">
+                        Repeat
+                      </Badge>
+                    )}
+                    {b.risk === "high" && (
+                      <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
+                        High Risk
+                      </Badge>
+                    )}
+                    {b.interstate && (
+                      <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
+                        Interstate
+                      </Badge>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+            {slice.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={10}
+                  className="text-center text-[#6B7280] py-6"
+                >
+                  No matching records.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-between mt-3">
+        <div className="text-[12px] text-[#6B7280]">
+          Showing {slice.length} of {filtered.length} records
+        </div>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8"
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </Button>
+          <span className="text-[12px] text-[#6B7280] px-2">
+            Page {page} / {pages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8"
+            disabled={page >= pages}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NDPSTable({
+  query,
+  page,
+  setPage,
+}: {
+  query: string;
+  page: number;
+  setPage: (n: number) => void;
+}) {
+  const filtered = ndpsAccused.filter((b) =>
+    [b.name, b.dist, b.ps, b.addr].some((v) =>
+      v.toLowerCase().includes(query.toLowerCase()),
+    ),
+  );
+  const perPage = 5;
+  const pages = Math.max(
+    1,
+    Math.ceil(filtered.length / perPage),
+  );
+  const slice = filtered.slice(
+    (page - 1) * perPage,
+    page * perPage,
+  );
+  return (
+    <div>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader className="sticky top-0 bg-white">
+            <TableRow>
+              <TableHead>અ.નં.</TableHead>
+              <TableHead>જિલ્લો</TableHead>
+              <TableHead>પોલીસ સ્ટેશન</TableHead>
+              <TableHead>આરોપી નામ</TableHead>
+              <TableHead>સરનામું</TableHead>
+              <TableHead className="text-right">
+                ગુનાઓ
+              </TableHead>
+              <TableHead>પકડાયેલ મુદામાલ ની કિંમત</TableHead>
+              <TableHead>ડ્રગ્સ જપ્ત</TableHead>
+              <TableHead>અરૈસ્ટ તારીખ</TableHead>
+              <TableHead>Tags</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {slice.map((b) => (
+              <TableRow
+                key={b.no}
+                className="hover:bg-[#F9FAFB]"
+              >
+                <TableCell>{b.no}</TableCell>
+                <TableCell className="font-medium">
+                  {b.dist}
+                </TableCell>
+                <TableCell className="text-[#6B7280]">
+                  {b.ps}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {b.name}
+                </TableCell>
+                <TableCell className="text-[#6B7280]">
+                  {b.addr}
+                </TableCell>
+                <TableCell className="text-right">
+                  {b.crimes}
+                </TableCell>
+                <TableCell className="font-semibold text-[#16A34A]">
+                  {b.seizureValue}
+                </TableCell>
+                <TableCell className="font-medium text-[#D97706]">
+                  {b.drugsSeized}
                 </TableCell>
                 <TableCell className="text-[#6B7280]">
                   {b.arrest}
