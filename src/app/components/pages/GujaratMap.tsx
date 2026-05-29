@@ -14,7 +14,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Panel, rand } from "../shared";
-import districtGeoData from "../../../imports/pasted_text/district-data.json";
+import districtGeoData from "../../data/district-data.json";
 
 const C = {
   primary: "#1D4ED8",
