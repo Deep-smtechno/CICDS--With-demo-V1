@@ -22,7 +22,7 @@ import {
   ArrowDownRight,
   ExternalLink,
 } from "lucide-react";
-import districtGeoData from "../../../imports/pasted_text/district-data.json";
+import districtGeoData from "../../data/district-data.json";
 import {
   Area,
   AreaChart,
@@ -556,7 +556,7 @@ export function UnifiedDashboard() {
               lineHeight: 1.15,
             }}
           >
-            Unified Crime Intelligence Command
+            Gujarat police dashboard
           </h1>
           <p className="text-[#6B7280] mt-1 text-[13px]">
             Gujarat Police · Liquor & Narcotics enforcement
