@@ -42,7 +42,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
         <div className="relative z-10 p-16 flex flex-col items-start justify-center h-full max-w-2xl text-left">
           <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 mb-8 shadow-2xl">
-            <Shield className="w-16 h-16 text-blue-400 drop-shadow-lg" />
+            <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-16 h-16 object-contain drop-shadow-lg" />
           </div>
           <h1 className="text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
             Gujarat Police <br/>
@@ -69,7 +69,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <div className="w-full max-w-md relative z-10">
           <div className="lg:hidden flex justify-center mb-8">
             <div className="bg-[#0a192f] p-4 rounded-2xl shadow-xl">
-              <Shield className="w-12 h-12 text-blue-400" />
+              <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-12 h-12 object-contain" />
             </div>
           </div>
           
