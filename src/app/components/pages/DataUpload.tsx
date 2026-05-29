@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   CloudUpload,
   Database,
@@ -17,16 +18,74 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { PageShell, Panel } from "../shared";
 
+const DISTRICT_STATIONS: Record<string, string[]> = {
+  Ahmedabad: ["Naroda", "Vastrapur", "Ellisbridge", "Navrangpura"],
+  Surat: ["Varachha", "Adajan", "Katargam", "Udhna"],
+  Vadodara: ["Akota", "Sayajigunj", "Gorwa", "Makarpura"],
+  Rajkot: ["Gondal", "Bhaktinagar", "Malaviya Nagar", "Pradhyuman Nagar"],
+  Bhavnagar: ["Nilambaug", "Ghogha Road", "Bor Talav", "Gangajaliya"],
+};
+
 export function DataUpload() {
+  const [district, setDistrict] = useState<string>("");
+  const [station, setStation] = useState<string>("");
+
   return (
     <PageShell
       title="Crime Dataset Upload Center"
       subtitle="Upload Excel datasets to automatically generate intelligence reports and enforcement analytics."
     >
       <Panel>
-        <div className="border-2 border-dashed border-[#BFDBFE] bg-[#F8FAFF] rounded-xl p-12 text-center hover:border-[#1D4ED8] hover:bg-[#EFF6FF] transition-colors">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex-1">
+            <label className="block text-[13px] font-medium text-[#374151] mb-1.5">
+              Select District
+            </label>
+            <Select value={district} onValueChange={(val) => { setDistrict(val); setStation(""); }}>
+              <SelectTrigger className="w-full h-10 bg-white">
+                <SelectValue placeholder="Choose District" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(DISTRICT_STATIONS).map((d) => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex-1">
+            <label className="block text-[13px] font-medium text-[#374151] mb-1.5">
+              Select Police Station
+            </label>
+            <Select value={station} onValueChange={setStation} disabled={!district}>
+              <SelectTrigger className="w-full h-10 bg-white">
+                <SelectValue placeholder="Choose Police Station" />
+              </SelectTrigger>
+              <SelectContent>
+                {district && DISTRICT_STATIONS[district]?.map((s) => (
+                  <SelectItem key={s} value={s}>{s} PS</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className={`border-2 border-dashed ${district && station ? "border-[#1D4ED8] bg-[#EFF6FF]" : "border-[#BFDBFE] bg-[#F8FAFF]"} rounded-xl p-12 text-center transition-colors relative overflow-hidden`}>
+          {(!district || !station) && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/50 backdrop-blur-[1px]">
+              <div className="bg-white px-5 py-3 rounded-lg shadow-sm border border-[#E5E7EB] text-[#374151] font-medium text-sm flex items-center gap-2">
+                Please select District and Police Station to upload data
+              </div>
+            </div>
+          )}
           <div className="w-16 h-16 mx-auto rounded-full bg-[#DBEAFE] flex items-center justify-center mb-4">
             <CloudUpload className="w-8 h-8 text-[#1D4ED8]" />
           </div>
@@ -34,7 +93,7 @@ export function DataUpload() {
             className="text-[#0F172A] mb-1"
             style={{ fontSize: 18, fontWeight: 600 }}
           >
-            Drop your crime dataset here
+            {district && station ? `Drop dataset for ${station} PS, ${district}` : "Drop your crime dataset here"}
           </h3>
           <p className="text-[14px] text-[#6B7280] mb-5">
             Drag & drop or browse your file. Supports .xlsx and .csv up to
@@ -69,16 +128,6 @@ export function DataUpload() {
 
       <Panel
         title="Recent Upload History"
-        action={
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 text-[12px] border-[#E5E7EB]"
-          >
-            <Database className="w-3.5 h-3.5" />
-            Manage Datasets
-          </Button>
-        }
       >
         <Table>
           <TableHeader>
@@ -148,8 +197,8 @@ export function DataUpload() {
                 r.s === "Completed"
                   ? "bg-[#ECFDF5] text-[#16A34A]"
                   : r.s === "Processing"
-                  ? "bg-[#EFF6FF] text-[#1D4ED8]"
-                  : "bg-[#FEF2F2] text-[#DC2626]";
+                    ? "bg-[#EFF6FF] text-[#1D4ED8]"
+                    : "bg-[#FEF2F2] text-[#DC2626]";
               return (
                 <TableRow
                   key={r.id}
