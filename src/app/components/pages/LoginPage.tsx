@@ -41,7 +41,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1D4ED8]/40 via-transparent to-transparent opacity-60" />
 
         <div className="relative z-10 p-16 flex flex-col items-center justify-center h-full max-w-2xl text-center w-full">
-          <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-40 h-40 object-contain drop-shadow-2xl mb-8" />
+          <img src="/Gujarat_Police_Logo.png" alt="Gujarat Police Logo" className="w-60 h-60 object-contain drop-shadow-2xl mb-8" />
           
           <h1 className="text-4xl sm:text-5xl font-normal text-white tracking-wide mb-1">
             State Monitoring Cell

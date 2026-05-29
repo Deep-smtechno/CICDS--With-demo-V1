@@ -39,7 +39,7 @@ export function TopNav({
             <Shield className="w-5 h-5" />
           </div>
           <div className="leading-tight">
-            <div className="text-[15px] font-semibold text-[#1E3A8A]">Gujarat police</div>
+            <div className="text-[15px] font-semibold text-[#1E3A8A]">State Monitoring Cell</div>
             <div className="text-[11px] text-[#6B7280] -mt-0.5">
               dashboard
             </div>

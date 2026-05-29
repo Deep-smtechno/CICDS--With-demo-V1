@@ -556,7 +556,7 @@ export function UnifiedDashboard() {
               lineHeight: 1.15,
             }}
           >
-            Gujarat police dashboard
+            State Monitoring Cell Dashboard
           </h1>
           <p className="text-[#6B7280] mt-1 text-[13px]">
             Gujarat Police · Liquor & Narcotics enforcement
