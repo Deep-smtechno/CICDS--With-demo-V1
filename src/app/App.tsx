@@ -34,7 +34,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full bg-[#F7F8FB] text-[#0F172A]">
-      <TopNav active={page} onChange={handleNav} />
+      <TopNav active={page} onChange={handleNav} onLogout={() => setIsLoggedIn(false)} />
       <FilterBar />
       {renderPage()}
     </div>

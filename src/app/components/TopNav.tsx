@@ -25,9 +25,11 @@ const NAV: { key: PageKey; label: string }[] = [
 export function TopNav({
   active,
   onChange,
+  onLogout,
 }: {
   active: PageKey;
   onChange: (k: PageKey) => void;
+  onLogout?: () => void;
 }) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-[#E5E7EB] shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
@@ -103,7 +105,7 @@ export function TopNav({
               <DropdownMenuItem>Security & Access</DropdownMenuItem>
               <DropdownMenuItem>Activity Log</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-[#DC2626]">
+              <DropdownMenuItem className="text-[#DC2626]" onClick={() => onLogout?.()}>
                 Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>
