@@ -40,17 +40,20 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-transparent to-transparent opacity-60" />
 
-        <div className="relative z-10 p-16 flex flex-col items-start justify-center h-full max-w-2xl text-left">
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 mb-8 shadow-2xl">
-            <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-16 h-16 object-contain drop-shadow-lg" />
-          </div>
-          <h1 className="text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
-            Gujarat Police <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
-              Dashboard
-            </span>
+        <div className="relative z-10 p-16 flex flex-col items-center justify-center h-full max-w-2xl text-center w-full">
+          <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-40 h-40 object-contain drop-shadow-2xl mb-8" />
+          
+          <h1 className="text-4xl sm:text-5xl font-normal text-white tracking-wide mb-1">
+            State Monitoring Cell
           </h1>
-          <p className="text-lg text-slate-300 leading-relaxed mb-12 max-w-lg border-l-4 border-blue-500 pl-4">
+          
+          <div className="flex items-center justify-center w-full max-w-md mx-auto gap-4 mb-12">
+            <div className="h-[6px] bg-white flex-grow"></div>
+            <span className="text-2xl sm:text-3xl font-medium text-white whitespace-nowrap">Gujarat Police</span>
+            <div className="h-[6px] bg-white flex-grow"></div>
+          </div>
+
+          <p className="text-lg text-slate-300 leading-relaxed mb-12 max-w-lg">
             Advanced analytics, real-time tracking, and strategic monitoring for unified crime intelligence. Secure access restricted to authorized personnel only.
           </p>
           <div className="flex items-center gap-4 text-sm text-slate-400">
@@ -67,9 +70,15 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")' }} />
         
         <div className="w-full max-w-md relative z-10">
-          <div className="lg:hidden flex justify-center mb-8">
-            <div className="bg-[#0a192f] p-4 rounded-2xl shadow-xl">
-              <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-12 h-12 object-contain" />
+          <div className="lg:hidden flex flex-col items-center justify-center mb-10 w-full">
+            <img src="/Gujarat-police-logo.png" alt="Gujarat Police Logo" className="w-24 h-24 mb-4 object-contain" />
+            <h1 className="text-3xl font-medium text-slate-900 tracking-tight text-center">
+              State Monitoring Cell
+            </h1>
+            <div className="flex items-center justify-center w-full gap-2 mt-1 px-8 max-w-sm">
+              <div className="h-1.5 bg-slate-800 flex-grow"></div>
+              <span className="text-xl font-medium text-slate-900">Gujarat Police</span>
+              <div className="h-1.5 bg-slate-800 flex-grow"></div>
             </div>
           </div>
           
