@@ -29,7 +29,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           <div className="mx-auto bg-blue-600 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-2">
             <Activity className="text-white w-8 h-8" />
           </div>
-          <CardTitle className="text-2xl font-bold text-slate-900">Gujarat Police Cyber Crime</CardTitle>
+          <CardTitle className="text-2xl font-bold text-slate-900">Gujarat police dashboard</CardTitle>
           <CardDescription className="text-slate-500 text-sm">Sign in to access the investigation and monitoring dashboard.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
