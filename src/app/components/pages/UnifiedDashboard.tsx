@@ -302,107 +302,107 @@ const cards: {
   tone: "blue" | "green" | "amber" | "red";
   seed: number;
 }[] = [
-  {
-    id: "bootleggers",
-    icon: <Users className="w-5 h-5" />,
-    label: "Total Bootleggers",
-    value: "12,847",
-    trend: "8.2%",
-    up: true,
-    tone: "blue",
-    seed: 11,
-  },
-  {
-    id: "repeat",
-    icon: <AlertTriangle className="w-5 h-5" />,
-    label: "Repeat Offenders",
-    value: "2,341",
-    trend: "12.5%",
-    up: true,
-    tone: "red",
-    seed: 22,
-  },
-  {
-    id: "liquor",
-    icon: <Wine className="w-5 h-5" />,
-    label: "Total Liquor Seized",
-    value: "184,520 L",
-    trend: "6.1%",
-    up: true,
-    tone: "blue",
-    seed: 33,
-  },
-  {
-    id: "NDPS",
-    icon: <Pill className="w-5 h-5" />,
-    label: "Total NDPS Cases",
-    value: "3,962",
-    trend: "9.4%",
-    up: true,
-    tone: "amber",
-    seed: 44,
-  },
-  {
-    id: "value",
-    icon: <IndianRupee className="w-5 h-5" />,
-    label: "Total Seizure Value",
-    value: "₹284.6 Cr",
-    trend: "14.3%",
-    up: true,
-    tone: "green",
-    seed: 55,
-  },
-  {
-    id: "arrests",
-    icon: <Shield className="w-5 h-5" />,
-    label: "Total Arrests",
-    value: "9,431",
-    trend: "5.7%",
-    up: true,
-    tone: "blue",
-    seed: 66,
-  },
-  {
-    id: "pending",
-    icon: <Clock className="w-5 h-5" />,
-    label: "Pending Investigations",
-    value: "1,284",
-    trend: "3.2%",
-    up: false,
-    tone: "amber",
-    seed: 77,
-  },
-  {
-    id: "missing",
-    icon: <FileWarning className="w-5 h-5" />,
-    label: "Missing District Reports",
-    value: "4",
-    trend: "1",
-    up: false,
-    tone: "red",
-    seed: 88,
-  },
-  {
-    id: "officer",
-    icon: <Award className="w-5 h-5" />,
-    label: "Top Performing Officer",
-    value: "ACP R. Patel",
-    trend: "Ahmedabad",
-    up: true,
-    tone: "green",
-    seed: 99,
-  },
-  {
-    id: "topDistrict",
-    icon: <MapPin className="w-5 h-5" />,
-    label: "Highest Crime District",
-    value: "Ahmedabad",
-    trend: "2,184 cases",
-    up: true,
-    tone: "blue",
-    seed: 101,
-  },
-];
+    {
+      id: "bootleggers",
+      icon: <Users className="w-5 h-5" />,
+      label: "Total Bootleggers",
+      value: "12,847",
+      trend: "8.2%",
+      up: true,
+      tone: "blue",
+      seed: 11,
+    },
+    {
+      id: "repeat",
+      icon: <AlertTriangle className="w-5 h-5" />,
+      label: "Repeat Offenders",
+      value: "2,341",
+      trend: "12.5%",
+      up: true,
+      tone: "red",
+      seed: 22,
+    },
+    {
+      id: "liquor",
+      icon: <Wine className="w-5 h-5" />,
+      label: "Total Liquor Seized",
+      value: "184,520 L",
+      trend: "6.1%",
+      up: true,
+      tone: "blue",
+      seed: 33,
+    },
+    {
+      id: "NDPS",
+      icon: <Pill className="w-5 h-5" />,
+      label: "Total NDPS Cases",
+      value: "3,962",
+      trend: "9.4%",
+      up: true,
+      tone: "amber",
+      seed: 44,
+    },
+    {
+      id: "value",
+      icon: <IndianRupee className="w-5 h-5" />,
+      label: "Total Seizure Value",
+      value: "₹284.6 Cr",
+      trend: "14.3%",
+      up: true,
+      tone: "green",
+      seed: 55,
+    },
+    {
+      id: "arrests",
+      icon: <Shield className="w-5 h-5" />,
+      label: "Total Arrests",
+      value: "9,431",
+      trend: "5.7%",
+      up: true,
+      tone: "blue",
+      seed: 66,
+    },
+    {
+      id: "pending",
+      icon: <Clock className="w-5 h-5" />,
+      label: "Pending Investigations",
+      value: "1,284",
+      trend: "3.2%",
+      up: false,
+      tone: "amber",
+      seed: 77,
+    },
+    {
+      id: "missing",
+      icon: <FileWarning className="w-5 h-5" />,
+      label: "Missing District Reports",
+      value: "4",
+      trend: "1",
+      up: false,
+      tone: "red",
+      seed: 88,
+    },
+    {
+      id: "officer",
+      icon: <Award className="w-5 h-5" />,
+      label: "Top Performing Officer",
+      value: "ACP R. Patel",
+      trend: "Ahmedabad",
+      up: true,
+      tone: "green",
+      seed: 99,
+    },
+    {
+      id: "topDistrict",
+      icon: <MapPin className="w-5 h-5" />,
+      label: "Highest Crime District",
+      value: "Ahmedabad",
+      trend: "2,184 cases",
+      up: true,
+      tone: "blue",
+      seed: 101,
+    },
+  ];
 
 interface DistrictData {
   code: string;
@@ -528,16 +528,16 @@ export function UnifiedDashboard() {
   const activeCard = cards.find((c) => c.id === openCard);
   const selectedDistrictData = selectedDistrict
     ? districtGeoData.districts.find(
-        (d: DistrictData) => d.code === selectedDistrict,
-      )
+      (d: DistrictData) => d.code === selectedDistrict,
+    )
     : null;
   const selectedCrimeData = selectedDistrict
     ? districtCrimeData[selectedDistrict]
     : null;
   const hoveredDistrictData = hoveredDistrict
     ? districtGeoData.districts.find(
-        (d: DistrictData) => d.code === hoveredDistrict,
-      )
+      (d: DistrictData) => d.code === hoveredDistrict,
+    )
     : null;
   const hoveredCrimeData = hoveredDistrict
     ? districtCrimeData[hoveredDistrict]
@@ -741,7 +741,22 @@ export function UnifiedDashboard() {
                       tickLine={false}
                       axisLine={false}
                     />
-                    <Tooltip key="tooltip-liquor" />
+                    <Tooltip
+                      key="tooltip-liquor"
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white p-2 border border-[#E5E7EB] rounded shadow-md text-[12px]">
+                              <p className="font-semibold text-[#0F172A] mb-1">{label}</p>
+                              <p className="text-[#1D4ED8]">
+                                Liquor: {payload[0].value} (L)
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
                     <Area
                       key="liquor"
                       type="monotone"
@@ -815,7 +830,22 @@ export function UnifiedDashboard() {
                       tickLine={false}
                       axisLine={false}
                     />
-                    <Tooltip key="tooltip-NDPS" />
+                    <Tooltip
+                      key="tooltip-NDPS"
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white p-2 border border-[#E5E7EB] rounded shadow-md text-[12px]">
+                              <p className="font-semibold text-[#0F172A] mb-1">{label}</p>
+                              <p className="text-[#D97706]">
+                                NDPS: {payload[0].value} (G)
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
                     <Area
                       key="NDPS"
                       type="monotone"
@@ -1020,11 +1050,10 @@ export function UnifiedDashboard() {
                               : "cases",
                           )
                         }
-                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${
-                          drillDownView === "cases"
-                            ? "border-[#1D4ED8] bg-white shadow-md"
-                            : "border-[#E5E7EB] bg-white hover:border-[#3B82F6]"
-                        }`}
+                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "cases"
+                          ? "border-[#1D4ED8] bg-white shadow-md"
+                          : "border-[#E5E7EB] bg-white hover:border-[#3B82F6]"
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-1">
                           <Shield className="w-4 h-4 text-[#1D4ED8]" />
@@ -1048,11 +1077,10 @@ export function UnifiedDashboard() {
                               : "liquor",
                           )
                         }
-                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${
-                          drillDownView === "liquor"
-                            ? "border-[#1D4ED8] bg-white shadow-md"
-                            : "border-[#E5E7EB] bg-white hover:border-[#1D4ED8]"
-                        }`}
+                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "liquor"
+                          ? "border-[#1D4ED8] bg-white shadow-md"
+                          : "border-[#E5E7EB] bg-white hover:border-[#1D4ED8]"
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-1">
                           <Wine className="w-4 h-4 text-[#1D4ED8]" />
@@ -1076,11 +1104,10 @@ export function UnifiedDashboard() {
                               : "NDPS",
                           )
                         }
-                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${
-                          drillDownView === "NDPS"
-                            ? "border-[#D97706] bg-white shadow-md"
-                            : "border-[#E5E7EB] bg-white hover:border-[#D97706]"
-                        }`}
+                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "NDPS"
+                          ? "border-[#D97706] bg-white shadow-md"
+                          : "border-[#E5E7EB] bg-white hover:border-[#D97706]"
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-1">
                           <Pill className="w-4 h-4 text-[#D97706]" />
@@ -1222,7 +1249,7 @@ export function UnifiedDashboard() {
                                   <TableCell className="text-[#6B7280]">
                                     {
                                       psNames[
-                                        i % psNames.length
+                                      i % psNames.length
                                       ]
                                     }{" "}
                                     PS
@@ -1231,20 +1258,20 @@ export function UnifiedDashboard() {
                                     {names[i % names.length]}{" "}
                                     {
                                       surnames[
-                                        (i + 3) %
-                                          surnames.length
+                                      (i + 3) %
+                                      surnames.length
                                       ]
                                     }
                                   </TableCell>
                                   <TableCell className="text-[#6B7280]">
                                     {
                                       psNames[
-                                        i % psNames.length
+                                      i % psNames.length
                                       ]
                                     }{" "}
                                     {
                                       areas[
-                                        (i + 2) % areas.length
+                                      (i + 2) % areas.length
                                       ]
                                     }
                                   </TableCell>
@@ -1275,23 +1302,23 @@ export function UnifiedDashboard() {
                         : drillDownView === "liquor"
                           ? selectedCrimeData.liquor
                           : selectedCrimeData.NDPS) > 10 && (
-                        <div className="text-center mt-3">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-[12px]"
-                          >
-                            View All{" "}
-                            {(drillDownView === "cases"
-                              ? selectedCrimeData.totalCases
-                              : drillDownView === "liquor"
-                                ? selectedCrimeData.liquor
-                                : selectedCrimeData.NDPS
-                            ).toLocaleString()}{" "}
-                            Records
-                          </Button>
-                        </div>
-                      )}
+                          <div className="text-center mt-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-[12px]"
+                            >
+                              View All{" "}
+                              {(drillDownView === "cases"
+                                ? selectedCrimeData.totalCases
+                                : drillDownView === "liquor"
+                                  ? selectedCrimeData.liquor
+                                  : selectedCrimeData.NDPS
+                              ).toLocaleString()}{" "}
+                              Records
+                            </Button>
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>
@@ -2196,11 +2223,10 @@ function ExecCard({
   return (
     <button
       onClick={onClick}
-      className={`text-left bg-white rounded-[14px] border p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(29,78,216,0.10)] hover:-translate-y-0.5 transition-all duration-180 ${
-        active
-          ? "border-[#1D4ED8] ring-2 ring-[#3B82F6]/20"
-          : "border-[#E5E7EB]"
-      }`}
+      className={`text-left bg-white rounded-[14px] border p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(29,78,216,0.10)] hover:-translate-y-0.5 transition-all duration-180 ${active
+        ? "border-[#1D4ED8] ring-2 ring-[#3B82F6]/20"
+        : "border-[#E5E7EB]"
+        }`}
     >
       <div className="flex items-start justify-between mb-2">
         <div

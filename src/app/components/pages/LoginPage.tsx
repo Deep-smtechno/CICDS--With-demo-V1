@@ -83,7 +83,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           
           <div className="text-center lg:text-left mb-10">
             <h2 className="text-3xl font-bold text-[#1E3A8A] tracking-tight mb-3">Welcome Back</h2>
-            <p className="text-[#6B7280]">Sign in to access the SM Techno dashboard</p>
+            <p className="text-[#6B7280]">Sign in to access the State Monitioring Cell dashboard</p>
           </div>
 
           {error && (
@@ -149,7 +149,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             </Button>
             
             <p className="text-center text-xs text-[#6B7280] font-medium pt-8">
-              Protected by SM Techno Systems <br/>
+              Design & Devloped by SM Techno Consultants Private Limited <br/>
             </p>
           </form>
         </div>

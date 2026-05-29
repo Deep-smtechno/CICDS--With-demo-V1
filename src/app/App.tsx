@@ -8,7 +8,18 @@ import { GujaratMap } from "./components/pages/GujaratMap";
 import { LoginPage } from "./components/pages/LoginPage";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const loginTime = localStorage.getItem("loginTime");
+    if (loginTime) {
+      const now = new Date().getTime();
+      // 15 minutes in milliseconds
+      if (now - parseInt(loginTime, 10) < 15 * 60 * 1000) {
+        return true;
+      }
+      localStorage.removeItem("loginTime");
+    }
+    return false;
+  });
   const [page, setPage] = useState<PageKey>("dashboard");
 
   const handleNav = (k: PageKey) => {
@@ -28,13 +39,23 @@ export default function App() {
     }
   };
 
+  const handleLogin = () => {
+    localStorage.setItem("loginTime", new Date().getTime().toString());
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("loginTime");
+    setIsLoggedIn(false);
+  };
+
   if (!isLoggedIn) {
-    return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
+    return <LoginPage onLogin={handleLogin} />;
   }
 
   return (
     <div className="min-h-screen w-full bg-[#F7F8FB] text-[#0F172A]">
-      <TopNav active={page} onChange={handleNav} onLogout={() => setIsLoggedIn(false)} />
+      <TopNav active={page} onChange={handleNav} onLogout={handleLogout} />
       <FilterBar />
       {renderPage()}
     </div>

@@ -65,14 +65,6 @@ export function TopNav({
           })}
         </nav>
 
-        <div className="hidden md:flex items-center relative">
-          <Search className="absolute left-2.5 w-4 h-4 text-[#6B7280]" />
-          <Input
-            placeholder="Search cases, officers..."
-            className="pl-8 w-56 h-9 bg-[#F9FAFB] border-[#E5E7EB]"
-          />
-        </div>
-
         <div className="flex items-center gap-3 ml-auto xl:ml-0">
           <button className="relative w-9 h-9 rounded-full hover:bg-[#F3F4F6] flex items-center justify-center transition-colors">
             <Bell className="w-5 h-5 text-[#374151]" />
