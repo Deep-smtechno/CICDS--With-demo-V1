@@ -38,7 +38,7 @@ interface DistrictData {
 
 interface CrimeData {
   liquor: number;
-  drugs: number;
+  NDPSs: number;
   totalCases: number;
   arrests: number;
   seizureValue: number;
@@ -58,7 +58,7 @@ export function GujaratMap() {
     districtGeoData.districts.forEach((district: DistrictData) => {
       data[district.code] = {
         liquor: Math.round(500 + r() * 2500),
-        drugs: Math.round(50 + r() * 600),
+        NDPSs: Math.round(50 + r() * 600),
         totalCases: Math.round(600 + r() * 3200),
         arrests: Math.round(400 + r() * 2000),
         seizureValue: Math.round((20 + r() * 180) * 10) / 10,
@@ -115,9 +115,9 @@ export function GujaratMap() {
         <Panel title="Gujarat District Map" className="xl:col-span-2">
           <div className="relative w-full" style={{ minHeight: 600 }}>
             <svg
-              viewBox="0 0 1100 700"
+              viewBox="0 0 1100 850"
               className="w-full h-full"
-              style={{ maxHeight: 700 }}
+              style={{ maxHeight: 600, minHeight: 400 }}
             >
               <g>
                 {districtGeoData.districts.map((district: DistrictData) => {
@@ -221,8 +221,8 @@ export function GujaratMap() {
                   />
                   <StatBox
                     icon={<Pill className="w-4 h-4" />}
-                    label="Drug Cases"
-                    value={selectedCrimeData.drugs.toLocaleString()}
+                    label="NDPS Cases"
+                    value={selectedCrimeData.NDPSs.toLocaleString()}
                     color="amber"
                   />
                 </div>
@@ -306,11 +306,10 @@ export function GujaratMap() {
                   <div
                     key={code}
                     onClick={() => setSelectedDistrict(code)}
-                    className={`rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${
-                      selectedDistrict === code
+                    className={`rounded-lg border p-4 cursor-pointer transition-all hover:shadow-md ${selectedDistrict === code
                         ? "border-[#1D4ED8] bg-[#EFF6FF]"
                         : "border-[#E5E7EB] hover:border-[#3B82F6]"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-start justify-between mb-2">
                       <span className="text-[24px] font-bold text-[#1D4ED8]">#{index + 1}</span>
@@ -327,7 +326,7 @@ export function GujaratMap() {
                     <div className="flex gap-1 mt-2 text-[11px] text-[#6B7280]">
                       <span>L: {data.liquor}</span>
                       <span>·</span>
-                      <span>D: {data.drugs}</span>
+                      <span>D: {data.NDPSs}</span>
                     </div>
                   </div>
                 );

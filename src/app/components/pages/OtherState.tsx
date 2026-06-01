@@ -106,7 +106,7 @@ export function OtherState() {
       code: s.code,
       cases: Math.round(12 + r() * 45),
       liquor: Math.round(800 + r() * 2200),
-      drugs: Math.round(2 + r() * 18),
+      NDPSs: Math.round(2 + r() * 18),
       value: Math.round(10 + r() * 90) / 10,
       suspects: Math.round(15 + r() * 85),
     }));
@@ -125,7 +125,7 @@ export function OtherState() {
   const casesByType = useMemo(() => {
     return [
       { type: "Liquor Smuggling", count: 24, color: C.primary },
-      { type: "Drug Transit", count: 18, color: C.amber },
+      { type: "NDPS Transit", count: 18, color: C.amber },
       { type: "MDMA/Cocaine", count: 12, color: C.red },
       { type: "Heroin Route", count: 8, color: C.primaryDark },
     ];
@@ -181,7 +181,7 @@ export function OtherState() {
         <StatCard icon={<Package className="w-5 h-5" />} label="Total Seizures" value="₹28.4 Cr" color="amber" />
         <StatCard icon={<Users className="w-5 h-5" />} label="Suspects" value="184" color="blue" />
         <StatCard icon={<Wine className="w-5 h-5" />} label="Liquor Cases" value="38" color="primary" />
-        <StatCard icon={<Pill className="w-5 h-5" />} label="Drug Cases" value="24" color="red" />
+        <StatCard icon={<Pill className="w-5 h-5" />} label="NDPS Cases" value="24" color="red" />
       </div>
 
       <Tabs defaultValue="cases" className="w-full">
@@ -264,8 +264,8 @@ export function OtherState() {
                       <TableCell>
                         <Badge className={
                           c.status === "Active" ? "bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]" :
-                          c.status === "Pending" ? "bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]" :
-                          "bg-[#F3F4F6] text-[#6B7280] hover:bg-[#F3F4F6]"
+                            c.status === "Pending" ? "bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]" :
+                              "bg-[#F3F4F6] text-[#6B7280] hover:bg-[#F3F4F6]"
                         }>
                           {c.status}
                         </Badge>
@@ -361,7 +361,7 @@ export function OtherState() {
                   <TableHead>State</TableHead>
                   <TableHead className="text-right">Cases</TableHead>
                   <TableHead className="text-right">Liquor (L)</TableHead>
-                  <TableHead className="text-right">Drugs (kg)</TableHead>
+                  <TableHead className="text-right">NDPSs (kg)</TableHead>
                   <TableHead className="text-right">Value (₹ Cr)</TableHead>
                   <TableHead className="text-right">Suspects</TableHead>
                 </TableRow>
@@ -372,7 +372,7 @@ export function OtherState() {
                     <TableCell className="font-medium">{s.state}</TableCell>
                     <TableCell className="text-right">{s.cases}</TableCell>
                     <TableCell className="text-right">{s.liquor.toLocaleString()}</TableCell>
-                    <TableCell className="text-right">{s.drugs}</TableCell>
+                    <TableCell className="text-right">{s.NDPSs}</TableCell>
                     <TableCell className="text-right">{s.value}</TableCell>
                     <TableCell className="text-right">{s.suspects}</TableCell>
                   </TableRow>
@@ -427,33 +427,29 @@ export function OtherState() {
               {filteredAlerts.map((alert) => (
                 <div
                   key={alert.id}
-                  className={`p-4 rounded-lg border ${
-                    alert.severity === "critical" ? "border-[#DC2626] bg-[#FEF2F2]" :
-                    alert.severity === "high" ? "border-[#F59E0B] bg-[#FFFBEB]" :
-                    alert.severity === "medium" ? "border-[#D97706] bg-[#FFF7ED]" :
-                    "border-[#E5E7EB] bg-[#F9FAFB]"
-                  }`}
+                  className={`p-4 rounded-lg border ${alert.severity === "critical" ? "border-[#DC2626] bg-[#FEF2F2]" :
+                      alert.severity === "high" ? "border-[#F59E0B] bg-[#FFFBEB]" :
+                        alert.severity === "medium" ? "border-[#D97706] bg-[#FFF7ED]" :
+                          "border-[#E5E7EB] bg-[#F9FAFB]"
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3 flex-1">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        alert.type === "error" ? "bg-[#FEE2E2] text-[#DC2626]" : "bg-[#FEF3C7] text-[#D97706]"
-                      }`}>
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${alert.type === "error" ? "bg-[#FEE2E2] text-[#DC2626]" : "bg-[#FEF3C7] text-[#D97706]"
+                        }`}>
                         {alert.type === "error" ? <XCircle className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-[11px] font-semibold uppercase px-2 py-0.5 rounded ${
-                            alert.type === "error" ? "bg-[#DC2626] text-white" : "bg-[#D97706] text-white"
-                          }`}>
+                          <span className={`text-[11px] font-semibold uppercase px-2 py-0.5 rounded ${alert.type === "error" ? "bg-[#DC2626] text-white" : "bg-[#D97706] text-white"
+                            }`}>
                             {alert.type}
                           </span>
-                          <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${
-                            alert.severity === "critical" ? "bg-[#DC2626] text-white" :
-                            alert.severity === "high" ? "bg-[#F59E0B] text-white" :
-                            alert.severity === "medium" ? "bg-[#D97706] text-white" :
-                            "bg-[#6B7280] text-white"
-                          }`}>
+                          <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${alert.severity === "critical" ? "bg-[#DC2626] text-white" :
+                              alert.severity === "high" ? "bg-[#F59E0B] text-white" :
+                                alert.severity === "medium" ? "bg-[#D97706] text-white" :
+                                  "bg-[#6B7280] text-white"
+                            }`}>
                             {alert.severity}
                           </span>
                           <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
@@ -470,8 +466,8 @@ export function OtherState() {
                     </div>
                     <Badge className={
                       alert.status === "resolved" ? "bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]" :
-                      alert.status === "acknowledged" ? "bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]" :
-                      "bg-[#FEF2F2] text-[#DC2626] hover:bg-[#FEF2F2]"
+                        alert.status === "acknowledged" ? "bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]" :
+                          "bg-[#FEF2F2] text-[#DC2626] hover:bg-[#FEF2F2]"
                     }>
                       {alert.status}
                     </Badge>

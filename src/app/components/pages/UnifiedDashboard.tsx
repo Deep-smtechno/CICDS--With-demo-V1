@@ -385,56 +385,6 @@ const cards: {
       tone: "green",
       seed: 55,
     },
-    {
-      id: "arrests",
-      icon: <Shield className="w-5 h-5" />,
-      label: "Total Arrests",
-      value: "9,431",
-      trend: "5.7%",
-      up: true,
-      tone: "blue",
-      seed: 66,
-    },
-    {
-      id: "pending",
-      icon: <Clock className="w-5 h-5" />,
-      label: "Pending Investigations",
-      value: "1,284",
-      trend: "3.2%",
-      up: false,
-      tone: "amber",
-      seed: 77,
-    },
-    {
-      id: "missing",
-      icon: <FileWarning className="w-5 h-5" />,
-      label: "Missing District Reports",
-      value: "4",
-      trend: "1",
-      up: false,
-      tone: "red",
-      seed: 88,
-    },
-    {
-      id: "officer",
-      icon: <Award className="w-5 h-5" />,
-      label: "Top Performing Officer",
-      value: "ACP R. Patel",
-      trend: "Ahmedabad",
-      up: true,
-      tone: "green",
-      seed: 99,
-    },
-    {
-      id: "topDistrict",
-      icon: <MapPin className="w-5 h-5" />,
-      label: "Highest Crime District",
-      value: "Ahmedabad",
-      trend: "2,184 cases",
-      up: true,
-      tone: "blue",
-      seed: 101,
-    },
   ];
 
 interface DistrictData {
@@ -484,11 +434,11 @@ export function UnifiedDashboard() {
   // Generate crime data for map districts
   const districtCrimeData = useMemo(() => {
     const r = rand(42);
-    const data: Record<string, CrimeData> = {};
+    const data = new Map<string, CrimeData>();
 
     districtGeoData.districts.forEach(
       (district: DistrictData) => {
-        data[district.code] = {
+        data.set(district.code, {
           liquor: Math.round(500 + r() * 2500),
           NDPS: Math.round(50 + r() * 600),
           totalCases: Math.round(600 + r() * 3200),
@@ -496,7 +446,7 @@ export function UnifiedDashboard() {
           seizureValue: Math.round((20 + r() * 180) * 10) / 10,
           pending: Math.round(50 + r() * 400),
           repeatOffenders: Math.round(20 + r() * 180),
-        };
+        });
       },
     );
 
@@ -523,14 +473,6 @@ export function UnifiedDashboard() {
   const openDrill = (id: CardId) => {
     setOpenCard((cur) => (cur === id ? null : id));
     setDrillTab("overview");
-    setTimeout(() => {
-      document
-        .getElementById("drill-workspace")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-    }, 60);
   };
 
   const getDistrictColor = (
@@ -538,10 +480,10 @@ export function UnifiedDashboard() {
     isHovered: boolean,
     isSelected: boolean,
   ) => {
-    const crimeData = districtCrimeData[districtCode];
+    const crimeData = districtCrimeData.get(districtCode);
     if (!crimeData) return C.surface;
 
-    const allCases = Object.values(districtCrimeData).map(
+    const allCases = Array.from(districtCrimeData.values()).map(
       (d) => d.totalCases,
     );
     const maxCases = Math.max(...allCases);
@@ -566,7 +508,7 @@ export function UnifiedDashboard() {
     )
     : null;
   const selectedCrimeData = selectedDistrict
-    ? districtCrimeData[selectedDistrict]
+    ? districtCrimeData.get(selectedDistrict) || null
     : null;
   const hoveredDistrictData = hoveredDistrict
     ? districtGeoData.districts.find(
@@ -574,7 +516,7 @@ export function UnifiedDashboard() {
     )
     : null;
   const hoveredCrimeData = hoveredDistrict
-    ? districtCrimeData[hoveredDistrict]
+    ? districtCrimeData.get(hoveredDistrict) || null
     : null;
 
   return (
@@ -629,1114 +571,6 @@ export function UnifiedDashboard() {
         </div>
       </section>
 
-      {/* Main Analytics Grid */}
-      <section className="grid grid-cols-1 xl:grid-cols-10 gap-6">
-        {/* Left 70% */}
-        <div className="xl:col-span-7 space-y-6">
-          <Panel
-            title="Monthly Crime Registration Trend"
-            action={<TrendBadge value="+11.4%" />}
-          >
-            <div
-              className="h-72 w-full"
-              style={{ minHeight: 288, minWidth: 300 }}
-            >
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minHeight={288}
-                minWidth={300}
-              >
-                <LineChart
-                  data={monthly}
-                  margin={{
-                    top: 8,
-                    right: 12,
-                    left: -10,
-                    bottom: 0,
-                  }}
-                >
-                  <CartesianGrid
-                    key="grid-monthly"
-                    stroke="#F1F5F9"
-                    vertical={false}
-                  />
-                  <XAxis
-                    key="xaxis-monthly"
-                    dataKey="m"
-                    stroke="#94A3B8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    key="yaxis-monthly"
-                    stroke="#94A3B8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Tooltip key="tooltip-monthly" />
-                  <Legend
-                    key="legend-monthly"
-                    iconType="circle"
-                    wrapperStyle={{ fontSize: 12 }}
-                  />
-                  <Line
-                    key="cases"
-                    type="monotone"
-                    dataKey="cases"
-                    stroke={C.primary}
-                    strokeWidth={2.5}
-                    dot={{ r: 3 }}
-                    name="Total Cases"
-                  />
-                  <Line
-                    key="liquor"
-                    type="monotone"
-                    dataKey="liquor"
-                    stroke={C.green}
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
-                    name="Liquor"
-                  />
-                  <Line
-                    key="NDPS"
-                    type="monotone"
-                    dataKey="NDPS"
-                    stroke={C.amber}
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
-                    name="NDPS"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </Panel>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Panel title="Liquor Seizure Analytics">
-              <div
-                className="h-60 w-full"
-                style={{ minHeight: 240, minWidth: 300 }}
-              >
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                  minHeight={240}
-                  minWidth={300}
-                >
-                  <AreaChart
-                    data={monthly}
-                    margin={{
-                      top: 8,
-                      right: 12,
-                      left: -12,
-                      bottom: 0,
-                    }}
-                  >
-                    <defs>
-                      <linearGradient
-                        id="liquorArea"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={C.primary}
-                          stopOpacity={0.35}
-                        />
-                        <stop
-                          offset="100%"
-                          stopColor={C.primary}
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      key="grid-liquor"
-                      stroke="#F1F5F9"
-                      vertical={false}
-                    />
-                    <XAxis
-                      key="xaxis-liquor"
-                      dataKey="m"
-                      stroke="#94A3B8"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      key="yaxis-liquor"
-                      stroke="#94A3B8"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <Tooltip
-                      key="tooltip-liquor"
-                      content={({ active, payload, label }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="bg-white p-2 border border-[#E5E7EB] rounded shadow-md text-[12px]">
-                              <p className="font-semibold text-[#0F172A] mb-1">{label}</p>
-                              <p className="text-[#1D4ED8]">
-                                Liquor: {payload[0].value} (L)
-                              </p>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Area
-                      key="liquor"
-                      type="monotone"
-                      dataKey="liquor"
-                      stroke={C.primary}
-                      strokeWidth={2}
-                      fill="url(#liquorArea)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </Panel>
-
-            <Panel title="NDPS Seizure Analytics">
-              <div
-                className="h-60 w-full"
-                style={{ minHeight: 240, minWidth: 300 }}
-              >
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                  minHeight={240}
-                  minWidth={300}
-                >
-                  <AreaChart
-                    data={monthly}
-                    margin={{
-                      top: 8,
-                      right: 12,
-                      left: -12,
-                      bottom: 0,
-                    }}
-                  >
-                    <defs>
-                      <linearGradient
-                        id="NDPSArea"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={C.amber}
-                          stopOpacity={0.35}
-                        />
-                        <stop
-                          offset="100%"
-                          stopColor={C.amber}
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      key="grid-NDPS"
-                      stroke="#F1F5F9"
-                      vertical={false}
-                    />
-                    <XAxis
-                      key="xaxis-NDPS"
-                      dataKey="m"
-                      stroke="#94A3B8"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      key="yaxis-NDPS"
-                      stroke="#94A3B8"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <Tooltip
-                      key="tooltip-NDPS"
-                      content={({ active, payload, label }) => {
-                        if (active && payload && payload.length) {
-                          return (
-                            <div className="bg-white p-2 border border-[#E5E7EB] rounded shadow-md text-[12px]">
-                              <p className="font-semibold text-[#0F172A] mb-1">{label}</p>
-                              <p className="text-[#D97706]">
-                                NDPS: {payload[0].value} (G)
-                              </p>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Area
-                      key="NDPS"
-                      type="monotone"
-                      dataKey="NDPS"
-                      stroke={C.amber}
-                      strokeWidth={2}
-                      fill="url(#NDPSArea)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </Panel>
-          </div>
-
-          <Panel
-            title="Interactive District Crime Map"
-            action={
-              selectedDistrict && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedDistrict(null);
-                    setDrillDownView(null);
-                  }}
-                  className="h-7 text-[12px]"
-                >
-                  <X className="w-3 h-3 mr-1" /> Clear Selection
-                </Button>
-              )
-            }
-          >
-            <div
-              className={`grid ${selectedDistrict ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"} gap-6 transition-all duration-300`}
-            >
-              {/* Map */}
-              <div className="relative">
-                <svg
-                  viewBox="0 0 1100 700"
-                  className="w-full h-full"
-                  style={{
-                    maxHeight: selectedDistrict ? 500 : 600,
-                    minHeight: 400,
-                  }}
-                >
-                  <g>
-                    {districtGeoData.districts.map(
-                      (district: DistrictData) => {
-                        const isHovered =
-                          hoveredDistrict === district.code;
-                        const isSelected =
-                          selectedDistrict === district.code;
-
-                        return (
-                          <g key={district.code}>
-                            <path
-                              d={district.path}
-                              fill={getDistrictColor(
-                                district.code,
-                                isHovered,
-                                isSelected,
-                              )}
-                              stroke={
-                                isSelected
-                                  ? C.primary
-                                  : isHovered
-                                    ? C.primaryLight
-                                    : "#94A3B8"
-                              }
-                              strokeWidth={
-                                isSelected
-                                  ? 2.5
-                                  : isHovered
-                                    ? 2
-                                    : 1
-                              }
-                              className="cursor-pointer transition-all duration-200"
-                              onMouseEnter={() =>
-                                setHoveredDistrict(
-                                  district.code,
-                                )
-                              }
-                              onMouseLeave={() =>
-                                setHoveredDistrict(null)
-                              }
-                              onClick={() => {
-                                setSelectedDistrict(
-                                  district.code,
-                                );
-                                setDrillDownView(null);
-                              }}
-                            />
-                            <text
-                              x={district.center.x}
-                              y={district.center.y}
-                              textAnchor="middle"
-                              className="pointer-events-none select-none"
-                              style={{
-                                fontSize: isSelected ? 13 : 11,
-                                fontWeight: isSelected
-                                  ? 700
-                                  : 600,
-                                fill: isSelected
-                                  ? "#fff"
-                                  : "#0F172A",
-                              }}
-                            >
-                              {district.name}
-                            </text>
-                          </g>
-                        );
-                      },
-                    )}
-                  </g>
-                </svg>
-
-                {/* Hover Tooltip */}
-                {hoveredDistrictData &&
-                  hoveredCrimeData &&
-                  !selectedDistrict && (
-                    <div className="absolute top-4 right-4 bg-white rounded-lg border border-[#E5E7EB] p-3 shadow-lg min-w-[200px] animate-in fade-in duration-200">
-                      <div className="flex items-center gap-2 mb-2">
-                        <MapPin className="w-4 h-4 text-[#1D4ED8]" />
-                        <span className="font-semibold text-[14px] text-[#0F172A]">
-                          {hoveredDistrictData.name}
-                        </span>
-                      </div>
-                      <div className="space-y-1 text-[12px]">
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7280]">
-                            Total Cases:
-                          </span>
-                          <span className="font-semibold text-[#0F172A]">
-                            {hoveredCrimeData.totalCases.toLocaleString()}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7280]">
-                            Liquor:
-                          </span>
-                          <span className="font-semibold text-[#1D4ED8]">
-                            {hoveredCrimeData.liquor.toLocaleString()}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7280]">
-                            NDPS:
-                          </span>
-                          <span className="font-semibold text-[#D97706]">
-                            {hoveredCrimeData.NDPS.toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                {/* Legend */}
-                <div className="absolute bottom-4 left-4 bg-white rounded-lg border border-[#E5E7EB] p-3 shadow-lg">
-                  <div className="text-[12px] font-semibold text-[#0F172A] mb-2">
-                    Crime Intensity
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      {[0.1, 0.3, 0.5, 0.7, 0.9].map(
-                        (intensity, i) => (
-                          <div
-                            key={i}
-                            className="w-6 h-3 rounded"
-                            style={{
-                              backgroundColor: `rgba(29, 78, 216, ${intensity})`,
-                            }}
-                          />
-                        ),
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-[10px] text-[#6B7280] mt-1">
-                    <span>Low</span>
-                    <span>High</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* District Details Panel */}
-              {selectedDistrictData && selectedCrimeData && (
-                <div className="space-y-4">
-                  <div className="bg-[#EFF6FF] rounded-lg p-4 border border-[#3B82F6]/20">
-                    <div className="flex items-center gap-2 mb-3">
-                      <MapPin className="w-5 h-5 text-[#1D4ED8]" />
-                      <h3 className="text-[18px] font-bold text-[#0F172A]">
-                        {selectedDistrictData.name}
-                      </h3>
-                    </div>
-
-                    {/* Quick Stats Grid */}
-                    <div className="grid grid-cols-3 gap-3 mb-4">
-                      <button
-                        onClick={() =>
-                          setDrillDownView(
-                            drillDownView === "cases"
-                              ? null
-                              : "cases",
-                          )
-                        }
-                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "cases"
-                          ? "border-[#1D4ED8] bg-white shadow-md"
-                          : "border-[#E5E7EB] bg-white hover:border-[#3B82F6]"
-                          }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <Shield className="w-4 h-4 text-[#1D4ED8]" />
-                          {drillDownView === "cases" && (
-                            <ExternalLink className="w-3 h-3 text-[#1D4ED8]" />
-                          )}
-                        </div>
-                        <div className="text-[16px] font-bold text-[#0F172A]">
-                          {selectedCrimeData.totalCases.toLocaleString()}
-                        </div>
-                        <div className="text-[11px] text-[#6B7280]">
-                          Total Cases
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          setDrillDownView(
-                            drillDownView === "liquor"
-                              ? null
-                              : "liquor",
-                          )
-                        }
-                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "liquor"
-                          ? "border-[#1D4ED8] bg-white shadow-md"
-                          : "border-[#E5E7EB] bg-white hover:border-[#1D4ED8]"
-                          }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <Wine className="w-4 h-4 text-[#1D4ED8]" />
-                          {drillDownView === "liquor" && (
-                            <ExternalLink className="w-3 h-3 text-[#1D4ED8]" />
-                          )}
-                        </div>
-                        <div className="text-[16px] font-bold text-[#0F172A]">
-                          {selectedCrimeData.liquor.toLocaleString()}
-                        </div>
-                        <div className="text-[11px] text-[#6B7280]">
-                          Liquor Cases
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          setDrillDownView(
-                            drillDownView === "NDPS"
-                              ? null
-                              : "NDPS",
-                          )
-                        }
-                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "NDPS"
-                          ? "border-[#D97706] bg-white shadow-md"
-                          : "border-[#E5E7EB] bg-white hover:border-[#D97706]"
-                          }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <Pill className="w-4 h-4 text-[#D97706]" />
-                          {drillDownView === "NDPS" && (
-                            <ExternalLink className="w-3 h-3 text-[#D97706]" />
-                          )}
-                        </div>
-                        <div className="text-[16px] font-bold text-[#0F172A]">
-                          {selectedCrimeData.NDPS.toLocaleString()}
-                        </div>
-                        <div className="text-[11px] text-[#6B7280]">
-                          NDPS Cases
-                        </div>
-                      </button>
-                    </div>
-
-                    {/* Detailed Metrics */}
-                    <div className="space-y-2 pt-3 border-t border-[#CBD5E1]">
-                      <div className="flex items-center justify-between text-[13px]">
-                        <div className="flex items-center gap-2">
-                          <IndianRupee className="w-4 h-4 text-[#16A34A]" />
-                          <span className="text-[#6B7280]">
-                            Seizure Value
-                          </span>
-                        </div>
-                        <span className="font-semibold text-[#0F172A]">
-                          ₹{selectedCrimeData.seizureValue} Cr
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-[13px]">
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className="w-4 h-4 text-[#DC2626]" />
-                          <span className="text-[#6B7280]">
-                            Repeat Offenders
-                          </span>
-                        </div>
-                        <span className="font-semibold text-[#0F172A]">
-                          {selectedCrimeData.repeatOffenders.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Drill-down Details */}
-                  {drillDownView && (
-                    <div className="bg-white rounded-lg border border-[#E5E7EB] p-4 animate-in slide-in-from-top-2 duration-300">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-[14px] font-semibold text-[#0F172A]">
-                          {drillDownView === "cases" &&
-                            "All Cases"}
-                          {drillDownView === "liquor" &&
-                            "Liquor Cases"}
-                          {drillDownView === "NDPS" &&
-                            "NDPS Cases"}
-                        </h4>
-                        <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                          {drillDownView === "cases" &&
-                            selectedCrimeData.totalCases}
-                          {drillDownView === "liquor" &&
-                            selectedCrimeData.liquor}
-                          {drillDownView === "NDPS" &&
-                            selectedCrimeData.NDPS}{" "}
-                          records
-                        </Badge>
-                      </div>
-                      <div className="overflow-x-auto max-h-[400px]">
-                        <Table>
-                          <TableHeader className="sticky top-0 bg-white">
-                            <TableRow>
-                              <TableHead>અ.નં.</TableHead>
-                              <TableHead>જિલ્લો</TableHead>
-                              <TableHead>
-                                પોલીસ સ્ટેશન
-                              </TableHead>
-                              <TableHead>બુટલેગર નામ</TableHead>
-                              <TableHead>સરનામું</TableHead>
-                              <TableHead className="text-right">
-                                ગુનાઓ
-                              </TableHead>
-                              <TableHead>
-                                અરૈસ્ટ તારીખ
-                              </TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {Array.from({
-                              length: Math.min(
-                                10,
-                                drillDownView === "cases"
-                                  ? selectedCrimeData.totalCases
-                                  : drillDownView === "liquor"
-                                    ? selectedCrimeData.liquor
-                                    : selectedCrimeData.NDPS,
-                              ),
-                            }).map((_, i) => {
-                              const psNames = [
-                                "City",
-                                "Rural",
-                                "Highway",
-                                "Railway",
-                                "Cyber",
-                              ];
-                              const names = [
-                                "Rameshbhai",
-                                "Bharatbhai",
-                                "Mukeshbhai",
-                                "Hiteshbhai",
-                                "Jayeshbhai",
-                                "Dineshbhai",
-                                "Kishorbhai",
-                              ];
-                              const surnames = [
-                                "Patel",
-                                "Shah",
-                                "Vaghela",
-                                "Chauhan",
-                                "Parmar",
-                                "Bhatti",
-                                "Rathod",
-                                "Solanki",
-                              ];
-                              const areas = [
-                                "Road",
-                                "Area",
-                                "Chowk",
-                                "Circle",
-                                "Nagar",
-                              ];
-
-                              return (
-                                <TableRow
-                                  key={i}
-                                  className="hover:bg-[#F9FAFB]"
-                                >
-                                  <TableCell>{i + 1}</TableCell>
-                                  <TableCell className="font-medium">
-                                    {selectedDistrictData.name}
-                                  </TableCell>
-                                  <TableCell className="text-[#6B7280]">
-                                    {
-                                      psNames[
-                                      i % psNames.length
-                                      ]
-                                    }{" "}
-                                    PS
-                                  </TableCell>
-                                  <TableCell className="font-medium">
-                                    {names[i % names.length]}{" "}
-                                    {
-                                      surnames[
-                                      (i + 3) %
-                                      surnames.length
-                                      ]
-                                    }
-                                  </TableCell>
-                                  <TableCell className="text-[#6B7280]">
-                                    {
-                                      psNames[
-                                      i % psNames.length
-                                      ]
-                                    }{" "}
-                                    {
-                                      areas[
-                                      (i + 2) % areas.length
-                                      ]
-                                    }
-                                  </TableCell>
-                                  <TableCell className="text-right">
-                                    {Math.floor(
-                                      3 + ((i * 2.3) % 10),
-                                    )}
-                                  </TableCell>
-                                  <TableCell className="text-[#6B7280]">
-                                    2026-
-                                    {String(
-                                      5 - Math.floor(i / 3),
-                                    ).padStart(2, "0")}
-                                    -
-                                    {String(28 - i).padStart(
-                                      2,
-                                      "0",
-                                    )}
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      </div>
-                      {(drillDownView === "cases"
-                        ? selectedCrimeData.totalCases
-                        : drillDownView === "liquor"
-                          ? selectedCrimeData.liquor
-                          : selectedCrimeData.NDPS) > 10 && (
-                          <div className="text-center mt-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-[12px]"
-                            >
-                              View All{" "}
-                              {(drillDownView === "cases"
-                                ? selectedCrimeData.totalCases
-                                : drillDownView === "liquor"
-                                  ? selectedCrimeData.liquor
-                                  : selectedCrimeData.NDPS
-                              ).toLocaleString()}{" "}
-                              Records
-                            </Button>
-                          </div>
-                        )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </Panel>
-
-          <Panel title="Police Station-wise Crime Ranking">
-            <div
-              className="h-72 w-full"
-              style={{ minHeight: 288, minWidth: 300 }}
-            >
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minHeight={288}
-                minWidth={300}
-              >
-                <BarChart
-                  data={stationData}
-                  layout="vertical"
-                  margin={{
-                    top: 8,
-                    right: 16,
-                    left: 8,
-                    bottom: 0,
-                  }}
-                >
-                  <CartesianGrid
-                    key="grid-station"
-                    stroke="#F1F5F9"
-                    horizontal={false}
-                  />
-                  <XAxis
-                    key="xaxis-station"
-                    type="number"
-                    stroke="#94A3B8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    key="yaxis-station"
-                    type="category"
-                    dataKey="s"
-                    stroke="#94A3B8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    width={110}
-                  />
-                  <Tooltip key="tooltip-station" />
-                  <Bar
-                    key="station-cases"
-                    dataKey="cases"
-                    radius={[0, 6, 6, 0]}
-                  >
-                    {stationData.map((s, i) => (
-                      <Cell
-                        key={`station-cell-${s.s}-${i}`}
-                        fill={
-                          i === 0
-                            ? C.primaryDark
-                            : i < 3
-                              ? C.primary
-                              : C.primaryLight
-                        }
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </Panel>
-
-          <Panel
-            title="District-wise Muddamal Analytics"
-            action={
-              <span className="text-[12px] text-[#6B7280]">
-                Liquor · NDPS · Total value (₹ Cr)
-              </span>
-            }
-          >
-            <div
-              className="h-72 w-full"
-              style={{ minHeight: 288, minWidth: 300 }}
-            >
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minHeight={288}
-                minWidth={300}
-              >
-                <BarChart
-                  data={districtData.slice(0, 10)}
-                  margin={{
-                    top: 8,
-                    right: 12,
-                    left: -10,
-                    bottom: 0,
-                  }}
-                >
-                  <CartesianGrid
-                    key="grid-muddamal"
-                    stroke="#F1F5F9"
-                    vertical={false}
-                  />
-                  <XAxis
-                    key="xaxis-muddamal"
-                    dataKey="d"
-                    stroke="#94A3B8"
-                    fontSize={11}
-                    tickLine={false}
-                    axisLine={false}
-                    angle={-20}
-                    textAnchor="end"
-                    height={50}
-                  />
-                  <YAxis
-                    key="yaxis-muddamal"
-                    stroke="#94A3B8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Tooltip key="tooltip-muddamal" />
-                  <Legend
-                    key="legend-muddamal"
-                    iconType="circle"
-                    wrapperStyle={{ fontSize: 12 }}
-                  />
-                  <Bar
-                    key="liquor"
-                    dataKey="liquor"
-                    stackId="a"
-                    fill={C.primary}
-                    name="Liquor (L)"
-                    radius={[0, 0, 0, 0]}
-                  />
-                  <Bar
-                    key="NDPS"
-                    dataKey="NDPS"
-                    stackId="a"
-                    fill={C.amber}
-                    name="NDPS (g)"
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </Panel>
-        </div>
-
-        {/* Right 30% */}
-        <div className="xl:col-span-3 space-y-6">
-          <SidePanel
-            title="Top Repeat Offenders"
-            icon={<AlertTriangle className="w-4 h-4" />}
-          >
-            {bootleggers.slice(0, 5).map((b, i) => (
-              <SideRow
-                key={b.no}
-                left={`${i + 1}. ${b.name}`}
-                sub={`${b.dist} · ${b.ps}`}
-                right={
-                  <Badge className="bg-[#FEF2F2] text-[#DC2626] hover:bg-[#FEF2F2]">
-                    {b.crimes} crimes
-                  </Badge>
-                }
-              />
-            ))}
-          </SidePanel>
-
-          <SidePanel
-            title="Top Performing Officers"
-            icon={<Award className="w-4 h-4" />}
-          >
-            {officers.slice(0, 5).map((o, i) => (
-              <SideRow
-                key={o.name}
-                left={`${i + 1}. ${o.name}`}
-                sub={`${o.district} · ${o.cases} cases`}
-                right={
-                  <Badge className="bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]">
-                    {o.strike}%
-                  </Badge>
-                }
-              />
-            ))}
-          </SidePanel>
-
-          <SidePanel
-            title="High-Risk Districts"
-            icon={<MapPin className="w-4 h-4" />}
-          >
-            {[...districtData]
-              .sort(
-                (a, b) =>
-                  b.liquor + b.NDPS - (a.liquor + a.NDPS),
-              )
-              .slice(0, 5)
-              .map((d, i) => (
-                <SideRow
-                  key={d.d}
-                  left={`${i + 1}. ${d.d}`}
-                  sub={`${(d.liquor + d.NDPS).toLocaleString()} cases`}
-                  right={
-                    <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
-                      ₹{d.value} Cr
-                    </Badge>
-                  }
-                />
-              ))}
-          </SidePanel>
-
-          <SidePanel
-            title="High-Value Seizures"
-            icon={<Package className="w-4 h-4" />}
-          >
-            <SideRow
-              key="seizure-1"
-              left="MDMA · 2.4 kg"
-              sub="Surat · PI K. Shah"
-              right={
-                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                  ₹4.8 Cr
-                </Badge>
-              }
-            />
-            <SideRow
-              key="seizure-2"
-              left="IMFL · 1,820 L"
-              sub="Ahmedabad · ACP R. Patel"
-              right={
-                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                  ₹1.2 Cr
-                </Badge>
-              }
-            />
-            <SideRow
-              key="seizure-3"
-              left="Ganja · 84 kg"
-              sub="Vadodara · PI M. Joshi"
-              right={
-                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                  ₹92 L
-                </Badge>
-              }
-            />
-            <SideRow
-              key="seizure-4"
-              left="Country liquor · 920 L"
-              sub="Rajkot · PSI A. Mehta"
-              right={
-                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                  ₹68 L
-                </Badge>
-              }
-            />
-          </SidePanel>
-
-          <SidePanel
-            title="Pending Investigations"
-            icon={<Clock className="w-4 h-4" />}
-          >
-            <SideRow
-              key="pending-1"
-              left="FIR · Wanted"
-              sub="Stage tracking"
-              right={
-                <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
-                  428
-                </Badge>
-              }
-            />
-            <SideRow
-              key="pending-2"
-              left="PA · Court Pending"
-              sub="Disposal queue"
-              right={
-                <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
-                  612
-                </Badge>
-              }
-            />
-            <SideRow
-              key="pending-3"
-              left="Investigation · Arrested"
-              sub="Chargesheet due"
-              right={
-                <Badge className="bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]">
-                  244
-                </Badge>
-              }
-            />
-          </SidePanel>
-
-          <SidePanel
-            title="Recent Arrests"
-            icon={<Shield className="w-4 h-4" />}
-          >
-            <SideRow
-              key="arrest-1"
-              left="Rameshbhai S."
-              sub="Ahmedabad · 2h ago"
-              right={
-                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                  Liquor
-                </Badge>
-              }
-            />
-            <SideRow
-              key="arrest-2"
-              left="Bharatbhai P."
-              sub="Surat · 5h ago"
-              right={
-                <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
-                  NDPS
-                </Badge>
-              }
-            />
-            <SideRow
-              key="arrest-3"
-              left="Mukeshbhai V."
-              sub="Rajkot · 9h ago"
-              right={
-                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                  Liquor
-                </Badge>
-              }
-            />
-          </SidePanel>
-        </div>
-      </section>
-
-      {/* Master Analytics */}
-      <Panel
-        title={masterType === "bootlegger" ? "Bootlegger Master Analytics" : "NDPS Master Analytics"}
-        action={
-          <div className="flex items-center gap-4">
-            <Tabs value={masterType} onValueChange={(val: any) => { setMasterType(val); setTablePage(1); }} className="w-[180px]">
-              <TabsList className="grid w-full grid-cols-2 h-8 p-0.5">
-                <TabsTrigger value="bootlegger" className="text-[12px] h-6">Bootlegger</TabsTrigger>
-                <TabsTrigger value="ndps" className="text-[12px] h-6">NDPS</TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2 w-4 h-4 text-[#6B7280]" />
-                <Input
-                  value={tableQuery}
-                  onChange={(e) => {
-                    setTableQuery(e.target.value);
-                    setTablePage(1);
-                  }}
-                  placeholder={masterType === "bootlegger" ? "Search bootlegger…" : "Search NDPS accused…"}
-                  className="pl-8 h-8 w-56 bg-[#F9FAFB] border-[#E5E7EB] text-[13px]"
-                />
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 gap-1.5"
-              >
-                <Download className="w-3.5 h-3.5" /> Export
-              </Button>
-            </div>
-          </div>
-        }
-      >
-        {masterType === "bootlegger" ? (
-          <BootleggerTable
-            query={tableQuery}
-            page={tablePage}
-            setPage={setTablePage}
-          />
-        ) : (
-          <NDPSTable
-            query={tableQuery}
-            page={tablePage}
-            setPage={setTablePage}
-          />
-        )}
-      </Panel>
 
       {/* Drill-down workspace */}
       <section id="drill-workspace">
@@ -2249,6 +1083,990 @@ export function UnifiedDashboard() {
           </div>
         )}
       </section>
+
+      {/* Main Analytics Grid */}
+      <section className="grid grid-cols-1 xl:grid-cols-10 gap-6">
+        {/* Left 70% */}
+        <div className="xl:col-span-7 space-y-6">
+          <Panel
+            title="Monthly Crime Registration Trend"
+            action={<TrendBadge value="+11.4%" />}
+          >
+            <div
+              className="h-72 w-full"
+              style={{ minHeight: 288, minWidth: 300 }}
+            >
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                minHeight={288}
+                minWidth={300}
+              >
+                <LineChart
+                  data={monthly}
+                  margin={{
+                    top: 8,
+                    right: 12,
+                    left: -10,
+                    bottom: 0,
+                  }}
+                >
+                  <CartesianGrid
+                    key="grid-monthly"
+                    stroke="#F1F5F9"
+                    vertical={false}
+                  />
+                  <XAxis
+                    key="xaxis-monthly"
+                    dataKey="m"
+                    stroke="#94A3B8"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    key="yaxis-monthly"
+                    stroke="#94A3B8"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip key="tooltip-monthly" />
+                  <Legend
+                    key="legend-monthly"
+                    iconType="circle"
+                    wrapperStyle={{ fontSize: 12 }}
+                  />
+                  <Line
+                    key="cases"
+                    type="monotone"
+                    dataKey="cases"
+                    stroke={C.primary}
+                    strokeWidth={2.5}
+                    dot={{ r: 3 }}
+                    name="Total Cases"
+                  />
+                  <Line
+                    key="liquor"
+                    type="monotone"
+                    dataKey="liquor"
+                    stroke={C.green}
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    name="Liquor"
+                  />
+                  <Line
+                    key="NDPS"
+                    type="monotone"
+                    dataKey="NDPS"
+                    stroke={C.amber}
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    name="NDPS"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Panel>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Panel title="Liquor Seizure Analytics">
+              <div
+                className="h-60 w-full"
+                style={{ minHeight: 240, minWidth: 300 }}
+              >
+                <ResponsiveContainer
+                  width="100%"
+                  height="100%"
+                  minHeight={240}
+                  minWidth={300}
+                >
+                  <AreaChart
+                    data={monthly}
+                    margin={{
+                      top: 8,
+                      right: 12,
+                      left: -12,
+                      bottom: 0,
+                    }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="liquorArea"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor={C.primary}
+                          stopOpacity={0.35}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor={C.primary}
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid
+                      key="grid-liquor"
+                      stroke="#F1F5F9"
+                      vertical={false}
+                    />
+                    <XAxis
+                      key="xaxis-liquor"
+                      dataKey="m"
+                      stroke="#94A3B8"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      key="yaxis-liquor"
+                      stroke="#94A3B8"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip
+                      key="tooltip-liquor"
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white p-2 border border-[#E5E7EB] rounded shadow-md text-[12px]">
+                              <p className="font-semibold text-[#0F172A] mb-1">{label}</p>
+                              <p className="text-[#1D4ED8]">
+                                Liquor: {payload[0].value} (L)
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Area
+                      key="liquor"
+                      type="monotone"
+                      dataKey="liquor"
+                      stroke={C.primary}
+                      strokeWidth={2}
+                      fill="url(#liquorArea)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </Panel>
+
+            <Panel title="NDPS Seizure Analytics">
+              <div
+                className="h-60 w-full"
+                style={{ minHeight: 240, minWidth: 300 }}
+              >
+                <ResponsiveContainer
+                  width="100%"
+                  height="100%"
+                  minHeight={240}
+                  minWidth={300}
+                >
+                  <AreaChart
+                    data={monthly}
+                    margin={{
+                      top: 8,
+                      right: 12,
+                      left: -12,
+                      bottom: 0,
+                    }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="NDPSArea"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor={C.amber}
+                          stopOpacity={0.35}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor={C.amber}
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid
+                      key="grid-NDPS"
+                      stroke="#F1F5F9"
+                      vertical={false}
+                    />
+                    <XAxis
+                      key="xaxis-NDPS"
+                      dataKey="m"
+                      stroke="#94A3B8"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      key="yaxis-NDPS"
+                      stroke="#94A3B8"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip
+                      key="tooltip-NDPS"
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white p-2 border border-[#E5E7EB] rounded shadow-md text-[12px]">
+                              <p className="font-semibold text-[#0F172A] mb-1">{label}</p>
+                              <p className="text-[#D97706]">
+                                NDPS: {payload[0].value} (G)
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Area
+                      key="NDPS"
+                      type="monotone"
+                      dataKey="NDPS"
+                      stroke={C.amber}
+                      strokeWidth={2}
+                      fill="url(#NDPSArea)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </Panel>
+          </div>
+
+          <Panel
+            title="Interactive District Crime Map"
+            action={
+              selectedDistrict && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedDistrict(null);
+                    setDrillDownView(null);
+                  }}
+                  className="h-7 text-[12px]"
+                >
+                  <X className="w-3 h-3 mr-1" /> Clear Selection
+                </Button>
+              )
+            }
+          >
+            <div
+              className={`grid ${selectedDistrict ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"} gap-6 transition-all duration-300`}
+            >
+              {/* Map */}
+              <div className="relative">
+                <svg
+                  viewBox="0 0 1100 850"
+                  className="w-full h-full"
+                  style={{
+                    maxHeight: selectedDistrict ? 500 : 600,
+                    minHeight: 400,
+                  }}
+                >
+                  <g>
+                    {districtGeoData.districts.map(
+                      (district: DistrictData) => {
+                        const isHovered =
+                          hoveredDistrict === district.code;
+                        const isSelected =
+                          selectedDistrict === district.code;
+
+                        return (
+                          <g key={district.code}>
+                            <path
+                              d={district.path}
+                              fill={getDistrictColor(
+                                district.code,
+                                isHovered,
+                                isSelected,
+                              )}
+                              stroke={
+                                isSelected
+                                  ? C.primary
+                                  : isHovered
+                                    ? C.primaryLight
+                                    : "#94A3B8"
+                              }
+                              strokeWidth={
+                                isSelected
+                                  ? 2.5
+                                  : isHovered
+                                    ? 2
+                                    : 1
+                              }
+                              className="cursor-pointer transition-all duration-200"
+                              onMouseEnter={() =>
+                                setHoveredDistrict(
+                                  district.code,
+                                )
+                              }
+                              onMouseLeave={() =>
+                                setHoveredDistrict(null)
+                              }
+                              onClick={() => {
+                                setSelectedDistrict(
+                                  district.code,
+                                );
+                                setDrillDownView(null);
+                              }}
+                            />
+                            <text
+                              x={district.center.x}
+                              y={district.center.y}
+                              textAnchor="middle"
+                              className="pointer-events-none select-none"
+                              style={{
+                                fontSize: isSelected ? 13 : 11,
+                                fontWeight: isSelected
+                                  ? 700
+                                  : 600,
+                                fill: isSelected
+                                  ? "#fff"
+                                  : "#0F172A",
+                              }}
+                            >
+                              {district.name}
+                            </text>
+                          </g>
+                        );
+                      },
+                    )}
+                  </g>
+                </svg>
+
+                {/* Hover Tooltip */}
+                {hoveredDistrictData &&
+                  hoveredCrimeData &&
+                  !selectedDistrict && (
+                    <div className="absolute top-4 right-4 bg-white rounded-lg border border-[#E5E7EB] p-3 shadow-lg min-w-[200px] animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <MapPin className="w-4 h-4 text-[#1D4ED8]" />
+                        <span className="font-semibold text-[14px] text-[#0F172A]">
+                          {hoveredDistrictData.name}
+                        </span>
+                      </div>
+                      <div className="space-y-1 text-[12px]">
+                        <div className="flex justify-between">
+                          <span className="text-[#6B7280]">
+                            Total Cases:
+                          </span>
+                          <span className="font-semibold text-[#0F172A]">
+                            {hoveredCrimeData.totalCases.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#6B7280]">
+                            Liquor:
+                          </span>
+                          <span className="font-semibold text-[#1D4ED8]">
+                            {hoveredCrimeData.liquor.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#6B7280]">
+                            NDPS:
+                          </span>
+                          <span className="font-semibold text-[#D97706]">
+                            {hoveredCrimeData.NDPS.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                {/* Legend */}
+                <div className="absolute bottom-4 left-4 bg-white rounded-lg border border-[#E5E7EB] p-3 shadow-lg">
+                  <div className="text-[12px] font-semibold text-[#0F172A] mb-2">
+                    Crime Intensity
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      {[0.1, 0.3, 0.5, 0.7, 0.9].map(
+                        (intensity, i) => (
+                          <div
+                            key={i}
+                            className="w-6 h-3 rounded"
+                            style={{
+                              backgroundColor: `rgba(29, 78, 216, ${intensity})`,
+                            }}
+                          />
+                        ),
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-[10px] text-[#6B7280] mt-1">
+                    <span>Low</span>
+                    <span>High</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* District Details Panel */}
+              {selectedDistrictData && selectedCrimeData && (
+                <div className="space-y-4">
+                  <div className="bg-[#EFF6FF] rounded-lg p-4 border border-[#3B82F6]/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="w-5 h-5 text-[#1D4ED8]" />
+                      <h3 className="text-[18px] font-bold text-[#0F172A]">
+                        {selectedDistrictData.name}
+                      </h3>
+                    </div>
+
+                    {/* Quick Stats Grid */}
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      <button
+                        onClick={() =>
+                          setDrillDownView(
+                            drillDownView === "cases"
+                              ? null
+                              : "cases",
+                          )
+                        }
+                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "cases"
+                          ? "border-[#1D4ED8] bg-white shadow-md"
+                          : "border-[#E5E7EB] bg-white hover:border-[#3B82F6]"
+                          }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <Shield className="w-4 h-4 text-[#1D4ED8]" />
+                          {drillDownView === "cases" && (
+                            <ExternalLink className="w-3 h-3 text-[#1D4ED8]" />
+                          )}
+                        </div>
+                        <div className="text-[16px] font-bold text-[#0F172A]">
+                          {selectedCrimeData.totalCases.toLocaleString()}
+                        </div>
+                        <div className="text-[11px] text-[#6B7280]">
+                          Total Cases
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          setDrillDownView(
+                            drillDownView === "liquor"
+                              ? null
+                              : "liquor",
+                          )
+                        }
+                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "liquor"
+                          ? "border-[#1D4ED8] bg-white shadow-md"
+                          : "border-[#E5E7EB] bg-white hover:border-[#1D4ED8]"
+                          }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <Wine className="w-4 h-4 text-[#1D4ED8]" />
+                          {drillDownView === "liquor" && (
+                            <ExternalLink className="w-3 h-3 text-[#1D4ED8]" />
+                          )}
+                        </div>
+                        <div className="text-[16px] font-bold text-[#0F172A]">
+                          {selectedCrimeData.liquor.toLocaleString()}
+                        </div>
+                        <div className="text-[11px] text-[#6B7280]">
+                          Liquor Cases
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          setDrillDownView(
+                            drillDownView === "NDPS"
+                              ? null
+                              : "NDPS",
+                          )
+                        }
+                        className={`rounded-lg border p-3 text-left transition-all hover:shadow-md ${drillDownView === "NDPS"
+                          ? "border-[#D97706] bg-white shadow-md"
+                          : "border-[#E5E7EB] bg-white hover:border-[#D97706]"
+                          }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <Pill className="w-4 h-4 text-[#D97706]" />
+                          {drillDownView === "NDPS" && (
+                            <ExternalLink className="w-3 h-3 text-[#D97706]" />
+                          )}
+                        </div>
+                        <div className="text-[16px] font-bold text-[#0F172A]">
+                          {selectedCrimeData.NDPS.toLocaleString()}
+                        </div>
+                        <div className="text-[11px] text-[#6B7280]">
+                          NDPS Cases
+                        </div>
+                      </button>
+                    </div>
+
+                    {/* Detailed Metrics */}
+                    <div className="space-y-2 pt-3 border-t border-[#CBD5E1]">
+                      <div className="flex items-center justify-between text-[13px]">
+                        <div className="flex items-center gap-2">
+                          <IndianRupee className="w-4 h-4 text-[#16A34A]" />
+                          <span className="text-[#6B7280]">
+                            Seizure Value
+                          </span>
+                        </div>
+                        <span className="font-semibold text-[#0F172A]">
+                          ₹{selectedCrimeData.seizureValue} Cr
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[13px]">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="w-4 h-4 text-[#DC2626]" />
+                          <span className="text-[#6B7280]">
+                            Repeat Offenders
+                          </span>
+                        </div>
+                        <span className="font-semibold text-[#0F172A]">
+                          {selectedCrimeData.repeatOffenders.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Drill-down Details */}
+                  {drillDownView && (
+                    <div className="bg-white rounded-lg border border-[#E5E7EB] p-4 animate-in slide-in-from-top-2 duration-300">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-[14px] font-semibold text-[#0F172A]">
+                          {drillDownView === "cases" &&
+                            "All Cases"}
+                          {drillDownView === "liquor" &&
+                            "Liquor Cases"}
+                          {drillDownView === "NDPS" &&
+                            "NDPS Cases"}
+                        </h4>
+                        <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
+                          {drillDownView === "cases" &&
+                            selectedCrimeData.totalCases}
+                          {drillDownView === "liquor" &&
+                            selectedCrimeData.liquor}
+                          {drillDownView === "NDPS" &&
+                            selectedCrimeData.NDPS}{" "}
+                          records
+                        </Badge>
+                      </div>
+                      <div className="overflow-x-auto max-h-[400px]">
+                        <Table>
+                          <TableHeader className="sticky top-0 bg-white">
+                            <TableRow>
+                              <TableHead>અ.નં.</TableHead>
+                              <TableHead>જિલ્લો</TableHead>
+                              <TableHead>
+                                પોલીસ સ્ટેશન
+                              </TableHead>
+                              <TableHead>બુટલેગર નામ</TableHead>
+                              <TableHead>સરનામું</TableHead>
+                              <TableHead className="text-right">
+                                ગુનાઓ
+                              </TableHead>
+                              <TableHead>
+                                અરૈસ્ટ તારીખ
+                              </TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {Array.from({
+                              length: Math.min(
+                                10,
+                                drillDownView === "cases"
+                                  ? selectedCrimeData.totalCases
+                                  : drillDownView === "liquor"
+                                    ? selectedCrimeData.liquor
+                                    : selectedCrimeData.NDPS,
+                              ),
+                            }).map((_, i) => {
+                              const psNames = [
+                                "City",
+                                "Rural",
+                                "Highway",
+                                "Railway",
+                                "Cyber",
+                              ];
+                              const names = [
+                                "Rameshbhai",
+                                "Bharatbhai",
+                                "Mukeshbhai",
+                                "Hiteshbhai",
+                                "Jayeshbhai",
+                                "Dineshbhai",
+                                "Kishorbhai",
+                              ];
+                              const surnames = [
+                                "Patel",
+                                "Shah",
+                                "Vaghela",
+                                "Chauhan",
+                                "Parmar",
+                                "Bhatti",
+                                "Rathod",
+                                "Solanki",
+                              ];
+                              const areas = [
+                                "Road",
+                                "Area",
+                                "Chowk",
+                                "Circle",
+                                "Nagar",
+                              ];
+
+                              return (
+                                <TableRow
+                                  key={i}
+                                  className="hover:bg-[#F9FAFB]"
+                                >
+                                  <TableCell>{i + 1}</TableCell>
+                                  <TableCell className="font-medium">
+                                    {selectedDistrictData.name}
+                                  </TableCell>
+                                  <TableCell className="text-[#6B7280]">
+                                    {psNames.at(i % psNames.length)}{" "}
+                                    PS
+                                  </TableCell>
+                                  <TableCell className="font-medium">
+                                    {names.at(i % names.length)}{" "}
+                                    {surnames.at((i + 3) % surnames.length)}
+                                  </TableCell>
+                                  <TableCell className="text-[#6B7280]">
+                                    {psNames.at(i % psNames.length)}{" "}
+                                    {areas.at((i + 2) % areas.length)}
+                                  </TableCell>
+                                  <TableCell className="text-right">
+                                    {Math.floor(
+                                      3 + ((i * 2.3) % 10),
+                                    )}
+                                  </TableCell>
+                                  <TableCell className="text-[#6B7280]">
+                                    2026-
+                                    {String(
+                                      5 - Math.floor(i / 3),
+                                    ).padStart(2, "0")}
+                                    -
+                                    {String(28 - i).padStart(
+                                      2,
+                                      "0",
+                                    )}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </div>
+                      {(drillDownView === "cases"
+                        ? selectedCrimeData.totalCases
+                        : drillDownView === "liquor"
+                          ? selectedCrimeData.liquor
+                          : selectedCrimeData.NDPS) > 10 && (
+                          <div className="text-center mt-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-[12px]"
+                            >
+                              View All{" "}
+                              {(drillDownView === "cases"
+                                ? selectedCrimeData.totalCases
+                                : drillDownView === "liquor"
+                                  ? selectedCrimeData.liquor
+                                  : selectedCrimeData.NDPS
+                              ).toLocaleString()}{" "}
+                              Records
+                            </Button>
+                          </div>
+                        )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </Panel>
+
+          <Panel title="Police Station-wise Crime Ranking">
+            <div
+              className="h-72 w-full"
+              style={{ minHeight: 288, minWidth: 300 }}
+            >
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                minHeight={288}
+                minWidth={300}
+              >
+                <BarChart
+                  data={stationData}
+                  layout="vertical"
+                  margin={{
+                    top: 8,
+                    right: 16,
+                    left: 8,
+                    bottom: 0,
+                  }}
+                >
+                  <CartesianGrid
+                    key="grid-station"
+                    stroke="#F1F5F9"
+                    horizontal={false}
+                  />
+                  <XAxis
+                    key="xaxis-station"
+                    type="number"
+                    stroke="#94A3B8"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    key="yaxis-station"
+                    type="category"
+                    dataKey="s"
+                    stroke="#94A3B8"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    width={110}
+                  />
+                  <Tooltip key="tooltip-station" />
+                  <Bar
+                    key="station-cases"
+                    dataKey="cases"
+                    radius={[0, 6, 6, 0]}
+                  >
+                    {stationData.map((s, i) => (
+                      <Cell
+                        key={`station-cell-${s.s}-${i}`}
+                        fill={
+                          i === 0
+                            ? C.primaryDark
+                            : i < 3
+                              ? C.primary
+                              : C.primaryLight
+                        }
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Panel>
+
+
+        </div>
+
+        {/* Right 30% */}
+        <div className="xl:col-span-3 space-y-6">
+          <SidePanel
+            title="Top Repeat Offenders"
+            icon={<AlertTriangle className="w-4 h-4" />}
+          >
+            {bootleggers.slice(0, 5).map((b, i) => (
+              <SideRow
+                key={b.no}
+                left={`${i + 1}. ${b.name}`}
+                sub={`${b.dist} · ${b.ps}`}
+                right={
+                  <Badge className="bg-[#FEF2F2] text-[#DC2626] hover:bg-[#FEF2F2]">
+                    {b.crimes} crimes
+                  </Badge>
+                }
+              />
+            ))}
+          </SidePanel>
+
+          <SidePanel
+            title="Top Performing Officers"
+            icon={<Award className="w-4 h-4" />}
+          >
+            {officers.slice(0, 5).map((o, i) => (
+              <SideRow
+                key={o.name}
+                left={`${i + 1}. ${o.name}`}
+                sub={`${o.district} · ${o.cases} cases`}
+                right={
+                  <Badge className="bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]">
+                    {o.strike}%
+                  </Badge>
+                }
+              />
+            ))}
+          </SidePanel>
+
+          <SidePanel
+            title="High-Risk Districts"
+            icon={<MapPin className="w-4 h-4" />}
+          >
+            {[...districtData]
+              .sort(
+                (a, b) =>
+                  b.liquor + b.NDPS - (a.liquor + a.NDPS),
+              )
+              .slice(0, 5)
+              .map((d, i) => (
+                <SideRow
+                  key={d.d}
+                  left={`${i + 1}. ${d.d}`}
+                  sub={`${(d.liquor + d.NDPS).toLocaleString()} cases`}
+                  right={
+                    <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
+                      ₹{d.value} Cr
+                    </Badge>
+                  }
+                />
+              ))}
+          </SidePanel>
+
+          <SidePanel
+            title="High-Value Seizures"
+            icon={<Package className="w-4 h-4" />}
+          >
+            <SideRow
+              key="seizure-1"
+              left="MDMA · 2.4 kg"
+              sub="Surat · PI K. Shah"
+              right={
+                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
+                  ₹4.8 Cr
+                </Badge>
+              }
+            />
+            <SideRow
+              key="seizure-2"
+              left="IMFL · 1,820 L"
+              sub="Ahmedabad · ACP R. Patel"
+              right={
+                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
+                  ₹1.2 Cr
+                </Badge>
+              }
+            />
+            <SideRow
+              key="seizure-3"
+              left="Ganja · 84 kg"
+              sub="Vadodara · PI M. Joshi"
+              right={
+                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
+                  ₹92 L
+                </Badge>
+              }
+            />
+            <SideRow
+              key="seizure-4"
+              left="Country liquor · 920 L"
+              sub="Rajkot · PSI A. Mehta"
+              right={
+                <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
+                  ₹68 L
+                </Badge>
+              }
+            />
+          </SidePanel>
+
+          <SidePanel
+            title="Pending Investigations"
+            icon={<Clock className="w-4 h-4" />}
+          >
+            <SideRow
+              key="pending-1"
+              left="FIR · Wanted"
+              sub="Stage tracking"
+              right={
+                <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
+                  428
+                </Badge>
+              }
+            />
+            <SideRow
+              key="pending-2"
+              left="PA · Court Pending"
+              sub="Disposal queue"
+              right={
+                <Badge className="bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]">
+                  612
+                </Badge>
+              }
+            />
+            <SideRow
+              key="pending-3"
+              left="Investigation · Arrested"
+              sub="Chargesheet due"
+              right={
+                <Badge className="bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]">
+                  244
+                </Badge>
+              }
+            />
+          </SidePanel>
+
+
+        </div>
+      </section>
+
+      {/* Master Analytics */}
+      <Panel
+        title={masterType === "bootlegger" ? "Bootlegger Master Analytics" : "NDPS Master Analytics"}
+        action={
+          <div className="flex items-center gap-4">
+            <Tabs value={masterType} onValueChange={(val: any) => { setMasterType(val); setTablePage(1); }} className="w-[180px]">
+              <TabsList className="grid w-full grid-cols-2 h-8 p-0.5">
+                <TabsTrigger value="bootlegger" className="text-[12px] h-6">Bootlegger</TabsTrigger>
+                <TabsTrigger value="ndps" className="text-[12px] h-6">NDPS</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2 w-4 h-4 text-[#6B7280]" />
+                <Input
+                  value={tableQuery}
+                  onChange={(e) => {
+                    setTableQuery(e.target.value);
+                    setTablePage(1);
+                  }}
+                  placeholder={masterType === "bootlegger" ? "Search bootlegger…" : "Search NDPS accused…"}
+                  className="pl-8 h-8 w-56 bg-[#F9FAFB] border-[#E5E7EB] text-[13px]"
+                />
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5"
+              >
+                <Download className="w-3.5 h-3.5" /> Export
+              </Button>
+            </div>
+          </div>
+        }
+      >
+        {masterType === "bootlegger" ? (
+          <BootleggerTable
+            query={tableQuery}
+            page={tablePage}
+            setPage={setTablePage}
+          />
+        ) : (
+          <NDPSTable
+            query={tableQuery}
+            page={tablePage}
+            setPage={setTablePage}
+          />
+        )}
+      </Panel>
+
     </div>
   );
 }
@@ -2262,12 +2080,13 @@ function ExecCard({
   active: boolean;
   onClick: () => void;
 }) {
-  const tones = {
-    blue: { bg: "#EFF6FF", fg: "#1D4ED8" },
-    green: { bg: "#ECFDF5", fg: "#16A34A" },
-    amber: { bg: "#FFFBEB", fg: "#D97706" },
-    red: { bg: "#FEF2F2", fg: "#DC2626" },
-  }[card.tone];
+  const tones = card.tone === "blue"
+    ? { bg: "#EFF6FF", fg: "#1D4ED8" }
+    : card.tone === "green"
+      ? { bg: "#ECFDF5", fg: "#16A34A" }
+      : card.tone === "amber"
+        ? { bg: "#FFFBEB", fg: "#D97706" }
+        : { bg: "#FEF2F2", fg: "#DC2626" };
   const data = useMemo(() => mini(card.seed), [card.seed]);
   const gid = `mini-${card.id}`;
   return (
