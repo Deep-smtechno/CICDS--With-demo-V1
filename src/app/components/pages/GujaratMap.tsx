@@ -209,7 +209,7 @@ export function GujaratMap() {
                 <div className="grid grid-cols-2 gap-3">
                   <StatBox
                     icon={<Shield className="w-4 h-4" />}
-                    label="Total Cases"
+                    label="કુલ કેસ"
                     value={selectedCrimeData.totalCases.toLocaleString()}
                     color="blue"
                   />
@@ -221,7 +221,7 @@ export function GujaratMap() {
                   />
                   <StatBox
                     icon={<Pill className="w-4 h-4" />}
-                    label="NDPS Cases"
+                    label="NDPS કેસ"
                     value={selectedCrimeData.NDPSs.toLocaleString()}
                     color="amber"
                   />
@@ -231,7 +231,7 @@ export function GujaratMap() {
                 <div className="space-y-3 pt-3 border-t border-[#F1F5F9]">
                   <MetricRow
                     icon={<IndianRupee className="w-4 h-4 text-[#16A34A]" />}
-                    label="Seizure Value"
+                    label="જપ્તી કિંમત"
                     value={`₹${selectedCrimeData.seizureValue} Cr`}
                   />
                   <MetricRow

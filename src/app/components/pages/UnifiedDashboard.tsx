@@ -338,7 +338,7 @@ const cards: {
     {
       id: "bootleggers",
       icon: <Users className="w-5 h-5" />,
-      label: "Total Bootleggers",
+      label: "કુલ બુટલેગર્સ",
       value: "12,847",
       trend: "8.2%",
       up: true,
@@ -348,7 +348,7 @@ const cards: {
     {
       id: "repeat",
       icon: <AlertTriangle className="w-5 h-5" />,
-      label: "Repeat Offenders",
+      label: "વારંવાર ગુનો કરનારા",
       value: "2,341",
       trend: "12.5%",
       up: true,
@@ -358,7 +358,7 @@ const cards: {
     {
       id: "liquor",
       icon: <Wine className="w-5 h-5" />,
-      label: "Total Liquor Seized",
+      label: "કુલ જપ્ત કરેલ દારૂ",
       value: "184,520 L",
       trend: "6.1%",
       up: true,
@@ -368,7 +368,7 @@ const cards: {
     {
       id: "NDPS",
       icon: <Pill className="w-5 h-5" />,
-      label: "Total NDPS Cases",
+      label: "કુલ NDPS કેસ",
       value: "3,962",
       trend: "9.4%",
       up: true,
@@ -378,7 +378,7 @@ const cards: {
     {
       id: "value",
       icon: <IndianRupee className="w-5 h-5" />,
-      label: "Total Seizure Value",
+      label: "કુલ જપ્તી કિંમત",
       value: "₹284.6 Cr",
       trend: "14.3%",
       up: true,
@@ -1089,7 +1089,7 @@ export function UnifiedDashboard() {
         {/* Left 70% */}
         <div className="xl:col-span-7 space-y-6">
           <Panel
-            title="Monthly Crime Registration Trend"
+            title="માસિક ગુના નોંધણી"
             action={<TrendBadge value="+11.4%" />}
           >
             <div
@@ -1170,7 +1170,7 @@ export function UnifiedDashboard() {
           </Panel>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Panel title="Liquor Seizure Analytics">
+            <Panel title="દારૂ જપ્તી એનાલિટિક્સ">
               <div
                 className="h-60 w-full"
                 style={{ minHeight: 240, minWidth: 300 }}
@@ -1259,7 +1259,7 @@ export function UnifiedDashboard() {
               </div>
             </Panel>
 
-            <Panel title="NDPS Seizure Analytics">
+            <Panel title="NDPS જપ્તી એનાલિટિક્સ">
               <div
                 className="h-60 w-full"
                 style={{ minHeight: 240, minWidth: 300 }}
@@ -1798,7 +1798,7 @@ export function UnifiedDashboard() {
             </div>
           </Panel>
 
-          <Panel title="Police Station-wise Crime Ranking">
+          <Panel title="પોલીસ સ્ટેશન મુજબ ક્રાઇમ રેન્કિંગ">
             <div
               className="h-72 w-full"
               style={{ minHeight: 288, minWidth: 300 }}
@@ -1872,7 +1872,7 @@ export function UnifiedDashboard() {
         {/* Right 30% */}
         <div className="xl:col-span-3 space-y-6">
           <SidePanel
-            title="Top Repeat Offenders"
+            title="પુનરાવર્તિત ગુનેગારો"
             icon={<AlertTriangle className="w-4 h-4" />}
           >
             {bootleggers.slice(0, 5).map((b, i) => (

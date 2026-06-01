@@ -176,19 +176,18 @@ export function OtherState() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <StatCard icon={<MapPin className="w-5 h-5" />} label="Total States" value={otherStates.length.toString()} color="blue" />
-        <StatCard icon={<Shield className="w-5 h-5" />} label="Active Cases" value="62" color="green" />
-        <StatCard icon={<Package className="w-5 h-5" />} label="Total Seizures" value="₹28.4 Cr" color="amber" />
-        <StatCard icon={<Users className="w-5 h-5" />} label="Suspects" value="184" color="blue" />
-        <StatCard icon={<Wine className="w-5 h-5" />} label="Liquor Cases" value="38" color="primary" />
-        <StatCard icon={<Pill className="w-5 h-5" />} label="NDPS Cases" value="24" color="red" />
+        <StatCard icon={<MapPin className="w-5 h-5" />} label="કુલ રાજ્યો" value={otherStates.length.toString()} color="blue" />
+        <StatCard icon={<Shield className="w-5 h-5" />} label="સક્રિય કેસ" value="62" color="green" />
+        <StatCard icon={<Package className="w-5 h-5" />} label="કુલ જપ્તી" value="₹28.4 Cr" color="amber" />
+        <StatCard icon={<Users className="w-5 h-5" />} label="શંકાસ્પદ" value="184" color="blue" />
+        <StatCard icon={<Wine className="w-5 h-5" />} label="દારૂના કેસ" value="38" color="primary" />
+        <StatCard icon={<Pill className="w-5 h-5" />} label="NDPS કેસ" value="24" color="red" />
       </div>
 
       <Tabs defaultValue="cases" className="w-full">
         <TabsList className="bg-white border border-[#E5E7EB] p-1">
-          <TabsTrigger value="cases">Interstate Cases</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="alerts">System Alerts & Errors</TabsTrigger>
+          <TabsTrigger value="cases">આંતર-રાજ્ય કેસ</TabsTrigger>
+          <TabsTrigger value="analytics">એનાલિટિક્સ</TabsTrigger>
         </TabsList>
 
         {/* Interstate Cases Tab */}
@@ -211,7 +210,7 @@ export function OtherState() {
                   onChange={(e) => setStateFilter(e.target.value)}
                   className="h-8 px-2 text-[13px] border border-[#E5E7EB] rounded-md bg-[#F9FAFB]"
                 >
-                  <option value="all">All States</option>
+                  <option value="all">બધા રાજ્યો</option>
                   {otherStates.map((s) => (
                     <option key={s.code} value={s.name}>{s.name}</option>
                   ))}
@@ -221,7 +220,7 @@ export function OtherState() {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="h-8 px-2 text-[13px] border border-[#E5E7EB] rounded-md bg-[#F9FAFB]"
                 >
-                  <option value="all">All Status</option>
+                  <option value="all">બધી સ્થિતિ</option>
                   <option value="Active">Active</option>
                   <option value="Pending">Pending</option>
                   <option value="Closed">Closed</option>
@@ -239,7 +238,7 @@ export function OtherState() {
                     <TableHead>Crime Type</TableHead>
                     <TableHead>Quantity</TableHead>
                     <TableHead className="text-right">Value</TableHead>
-                    <TableHead className="text-right">Suspects</TableHead>
+                    <TableHead className="text-right">શંકાસ્પદ</TableHead>
                     <TableHead>Gujarat Link</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
@@ -332,7 +331,7 @@ export function OtherState() {
                     <Tooltip />
                     <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
                     <Line key="cases" type="monotone" dataKey="cases" stroke={C.primary} strokeWidth={2.5} dot={{ r: 3 }} name="Cases" />
-                    <Line key="suspects" type="monotone" dataKey="suspects" stroke={C.amber} strokeWidth={2} dot={{ r: 3 }} name="Suspects" />
+                    <Line key="suspects" type="monotone" dataKey="suspects" stroke={C.amber} strokeWidth={2} dot={{ r: 3 }} name="શંકાસ્પદ" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -363,7 +362,7 @@ export function OtherState() {
                   <TableHead className="text-right">Liquor (L)</TableHead>
                   <TableHead className="text-right">NDPSs (kg)</TableHead>
                   <TableHead className="text-right">Value (₹ Cr)</TableHead>
-                  <TableHead className="text-right">Suspects</TableHead>
+                  <TableHead className="text-right">શંકાસ્પદ</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -382,104 +381,6 @@ export function OtherState() {
           </Panel>
         </TabsContent>
 
-        {/* System Alerts & Errors Tab */}
-        <TabsContent value="alerts" className="mt-6 space-y-6">
-          {/* Alert Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <AlertStatCard icon={<AlertCircle className="w-5 h-5" />} label="Total Alerts" value={alertCounts.total.toString()} color="blue" />
-            <AlertStatCard icon={<XCircle className="w-5 h-5" />} label="Errors" value={alertCounts.error.toString()} color="red" />
-            <AlertStatCard icon={<AlertTriangle className="w-5 h-5" />} label="Warnings" value={alertCounts.warning.toString()} color="amber" />
-            <AlertStatCard icon={<FileWarning className="w-5 h-5" />} label="Critical" value={alertCounts.critical.toString()} color="red" />
-            <AlertStatCard icon={<AlertCircle className="w-5 h-5" />} label="Unresolved" value={alertCounts.unresolved.toString()} color="amber" />
-          </div>
-
-          <Panel
-            title="System Alerts & Error Log"
-            action={
-              <div className="flex items-center gap-2 flex-wrap">
-                <select
-                  value={alertFilter}
-                  onChange={(e) => setAlertFilter(e.target.value)}
-                  className="h-8 px-2 text-[13px] border border-[#E5E7EB] rounded-md bg-[#F9FAFB]"
-                >
-                  <option value="all">All Types</option>
-                  <option value="error">Errors</option>
-                  <option value="warning">Warnings</option>
-                </select>
-                <select
-                  value={severityFilter}
-                  onChange={(e) => setSeverityFilter(e.target.value)}
-                  className="h-8 px-2 text-[13px] border border-[#E5E7EB] rounded-md bg-[#F9FAFB]"
-                >
-                  <option value="all">All Severity</option>
-                  <option value="critical">Critical</option>
-                  <option value="high">High</option>
-                  <option value="medium">Medium</option>
-                  <option value="low">Low</option>
-                </select>
-                <Button variant="outline" size="sm" className="h-8">
-                  Clear Resolved
-                </Button>
-              </div>
-            }
-          >
-            <div className="space-y-2">
-              {filteredAlerts.map((alert) => (
-                <div
-                  key={alert.id}
-                  className={`p-4 rounded-lg border ${alert.severity === "critical" ? "border-[#DC2626] bg-[#FEF2F2]" :
-                      alert.severity === "high" ? "border-[#F59E0B] bg-[#FFFBEB]" :
-                        alert.severity === "medium" ? "border-[#D97706] bg-[#FFF7ED]" :
-                          "border-[#E5E7EB] bg-[#F9FAFB]"
-                    }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3 flex-1">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${alert.type === "error" ? "bg-[#FEE2E2] text-[#DC2626]" : "bg-[#FEF3C7] text-[#D97706]"
-                        }`}>
-                        {alert.type === "error" ? <XCircle className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-[11px] font-semibold uppercase px-2 py-0.5 rounded ${alert.type === "error" ? "bg-[#DC2626] text-white" : "bg-[#D97706] text-white"
-                            }`}>
-                            {alert.type}
-                          </span>
-                          <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${alert.severity === "critical" ? "bg-[#DC2626] text-white" :
-                              alert.severity === "high" ? "bg-[#F59E0B] text-white" :
-                                alert.severity === "medium" ? "bg-[#D97706] text-white" :
-                                  "bg-[#6B7280] text-white"
-                            }`}>
-                            {alert.severity}
-                          </span>
-                          <Badge className="bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#EFF6FF]">
-                            {alert.module}
-                          </Badge>
-                        </div>
-                        <div className="text-[14px] font-medium text-[#0F172A] mb-1">
-                          {alert.message}
-                        </div>
-                        <div className="text-[12px] text-[#6B7280]">
-                          {alert.timestamp}
-                        </div>
-                      </div>
-                    </div>
-                    <Badge className={
-                      alert.status === "resolved" ? "bg-[#ECFDF5] text-[#16A34A] hover:bg-[#ECFDF5]" :
-                        alert.status === "acknowledged" ? "bg-[#FFFBEB] text-[#D97706] hover:bg-[#FFFBEB]" :
-                          "bg-[#FEF2F2] text-[#DC2626] hover:bg-[#FEF2F2]"
-                    }>
-                      {alert.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 text-[13px] text-[#6B7280]">
-              Showing {filteredAlerts.length} of {systemAlerts.length} alerts
-            </div>
-          </Panel>
-        </TabsContent>
       </Tabs>
     </div>
   );

@@ -133,13 +133,13 @@ export function DataUpload() {
           <TableHeader>
             <TableRow className="border-[#F1F5F9]">
               {[
-                "Upload ID",
-                "File Name",
-                "Uploaded By",
-                "Upload Date",
-                "Records",
-                "Status",
-                "Actions",
+                "અપલોડ આઈડી",
+                "ફાઇલ નામ",
+                "અપલોડ કરનાર",
+                "અપલોડ તારીખ",
+                "રેકોર્ડ્સ",
+                "સ્થિતિ",
+                "ક્રિયાઓ",
               ].map((h) => (
                 <TableHead
                   key={h}
