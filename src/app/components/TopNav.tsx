@@ -13,13 +13,14 @@ import {
 } from "./ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
-export type PageKey = "dashboard" | "upload" | "otherstate" | "map";
+export type PageKey = "dashboard" | "upload" | "otherstate" | "map" | "route";
 
 const NAV: { key: PageKey; label: string }[] = [
   { key: "dashboard", label: "Dashboard" },
   { key: "upload", label: "Upload Data" },
   { key: "otherstate", label: "Other State" },
   { key: "map", label: "Map View" },
+  { key: "route", label: "Route Intelligence" },
 ];
 
 export function TopNav({

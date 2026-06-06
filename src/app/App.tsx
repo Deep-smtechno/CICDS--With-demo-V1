@@ -6,6 +6,7 @@ import { OtherState } from "./components/pages/OtherState";
 import { UnifiedDashboard } from "./components/pages/UnifiedDashboard";
 import { GujaratMap } from "./components/pages/GujaratMap";
 import { LoginPage } from "./components/pages/LoginPage";
+import { RouteIntelligence } from "./components/pages/RouteIntelligence";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -36,6 +37,8 @@ export default function App() {
         return <OtherState />;
       case "map":
         return <GujaratMap />;
+      case "route":
+        return <RouteIntelligence />;
     }
   };
 
