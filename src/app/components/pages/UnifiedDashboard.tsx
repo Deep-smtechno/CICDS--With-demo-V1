@@ -498,12 +498,12 @@ export function UnifiedDashboard() {
         { name: "Country Liquor (Desi)", count: 84780, percentage: 23, color: "#D97706", sub: "Desi Daru" },
         { name: "Rum & Vodka", count: 43460, percentage: 12, color: "#16A34A", sub: "IMFL Category" },
       ],
-      sizes: [
-        { name: "Quart (750ml)", count: 166068, percentage: 45, color: "#4F46E5" },
-        { name: "Pint (375ml)", count: 110712, percentage: 30, color: "#06B6D4" },
-        { name: "Nip (180ml)", count: 55356, percentage: 15, color: "#EC4899" },
-        { name: "Beer Bottle (650ml)", count: 36904, percentage: 10, color: "#10B981" },
-      ],
+      // sizes: [
+      //   { name: "Quart (750ml)", count: 166068, percentage: 45, color: "#4F46E5" },
+      //   { name: "Pint (375ml)", count: 110712, percentage: 30, color: "#06B6D4" },
+      //   { name: "Nip (180ml)", count: 55356, percentage: 15, color: "#EC4899" },
+      //   { name: "Beer Bottle (650ml)", count: 36904, percentage: 10, color: "#10B981" },
+      // ],
       brands: [
         { name: "Royal Stag", type: "Whiskey (750ml)", count: "42,300", volume: "31,725 L", value: "₹63.4 Lakh" },
         { name: "McDowell's No.1", type: "Whiskey (375ml)", count: "38,400", volume: "14,400 L", value: "₹28.8 Lakh" },
@@ -532,11 +532,11 @@ export function UnifiedDashboard() {
         { name: "Opium (Afeem)", count: 356, weight: "42.8 kg", percentage: 9, color: "#4F46E5" },
         { name: "Prescription Drugs", count: 256, weight: "48,500 units", percentage: 7, color: "#EC4899" },
       ],
-      types: [
-        { name: "Synthetic Drugs (MDMA, MD, Heroin)", percentage: 38, count: 1505, color: "#DC2626" },
-        { name: "Natural/Plant-based (Ganja, Opium, Charas)", percentage: 55, count: 2201, color: "#16A34A" },
-        { name: "Prescription / Pharmaceutical", percentage: 7, count: 256, color: "#3B82F6" },
-      ],
+      // types: [
+      //   { name: "Synthetic Drugs (MDMA, MD, Heroin)", percentage: 38, count: 1505, color: "#DC2626" },
+      //   { name: "Natural/Plant-based (Ganja, Opium, Charas)", percentage: 55, count: 2201, color: "#16A34A" },
+      //   { name: "Prescription / Pharmaceutical", percentage: 7, count: 256, color: "#3B82F6" },
+      // ],
       topSeizures: [
         { district: "Surat", drug: "MDMA", quantity: "12.4 kg", value: "₹24.8 Cr", date: "2026-05-26" },
         { district: "Ahmedabad", drug: "Heroin", quantity: "8.2 kg", value: "₹24.6 Cr", date: "2026-04-18" },
@@ -555,11 +555,11 @@ export function UnifiedDashboard() {
         { name: "Street Gambling (વરલી મટકા/ખુલ્લો જુગાર)", count: 1120, value: "₹1.8 Cr", percentage: 19, color: "#D97706" },
         { name: "Club Raids (મોટી જુગાર ક્લબો)", count: 592, value: "₹3.1 Cr", percentage: 10, color: "#16A34A" },
       ],
-      types: [
-        { name: "Structured Clubs & Dens", percentage: 52, count: 3042, color: "#4F46E5" },
-        { name: "Digital & Online Networks", percentage: 29, count: 1680, color: "#06B6D4" },
-        { name: "Street & Localized Gambling", percentage: 19, count: 1120, color: "#D97706" },
-      ],
+      // types: [
+      //   { name: "Structured Clubs & Dens", percentage: 52, count: 3042, color: "#4F46E5" },
+      //   { name: "Digital & Online Networks", percentage: 29, count: 1680, color: "#06B6D4" },
+      //   { name: "Street & Localized Gambling", percentage: 19, count: 1120, color: "#D97706" },
+      // ],
       topRaids: [
         { district: "Ahmedabad", location: "S.G. Highway Club", players: 42, seizedValue: "₹45.2 Lakh", date: "2026-05-28" },
         { district: "Surat", location: "Adajan Luxury Apartment", players: 28, seizedValue: "₹32.8 Lakh", date: "2026-05-15" },
@@ -757,41 +757,37 @@ export function UnifiedDashboard() {
           <div className="flex items-center gap-1 bg-[#EFF6FF]/60 p-1 rounded-lg border border-[#3B82F6]/15">
             <button
               onClick={() => { setFilterMode("overall"); setOpenCard(null); }}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${
-                filterMode === "overall"
-                  ? "bg-[#1D4ED8] text-white shadow-sm"
-                  : "text-[#475569] hover:bg-white"
-              }`}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${filterMode === "overall"
+                ? "bg-[#1D4ED8] text-white shadow-sm"
+                : "text-[#475569] hover:bg-white"
+                }`}
             >
               Overall
             </button>
             <button
               onClick={() => { setFilterMode("bootlegger"); setOpenCard(null); }}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${
-                filterMode === "bootlegger"
-                  ? "bg-[#16A34A] text-white shadow-sm"
-                  : "text-[#475569] hover:bg-white"
-              }`}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${filterMode === "bootlegger"
+                ? "bg-[#16A34A] text-white shadow-sm"
+                : "text-[#475569] hover:bg-white"
+                }`}
             >
               Bootlegger
             </button>
             <button
               onClick={() => { setFilterMode("ndps"); setOpenCard(null); }}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${
-                filterMode === "ndps"
-                  ? "bg-[#D97706] text-white shadow-sm"
-                  : "text-[#475569] hover:bg-white"
-              }`}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${filterMode === "ndps"
+                ? "bg-[#D97706] text-white shadow-sm"
+                : "text-[#475569] hover:bg-white"
+                }`}
             >
               Narcotics (NDPS)
             </button>
             <button
               onClick={() => { setFilterMode("gambling"); setOpenCard(null); }}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${
-                filterMode === "gambling"
-                  ? "bg-[#4F46E5] text-white shadow-sm"
-                  : "text-[#475569] hover:bg-white"
-              }`}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-semibold transition-all ${filterMode === "gambling"
+                ? "bg-[#4F46E5] text-white shadow-sm"
+                : "text-[#475569] hover:bg-white"
+                }`}
             >
               Gambling (જુગાર)
             </button>
@@ -1093,7 +1089,7 @@ export function UnifiedDashboard() {
                   {/* Category & Size Breakdown */}
                   <div className="border border-[#E5E7EB] rounded-lg p-4 bg-white">
                     <h4 className="text-[14px] font-bold text-[#0F172A] mb-4">Bottle Categories & Size Shares</h4>
-                    
+
                     <div className="space-y-4">
                       {/* Categories */}
                       <div>
@@ -1114,7 +1110,7 @@ export function UnifiedDashboard() {
                       </div>
 
                       {/* Sizes */}
-                      <div className="pt-4 border-t border-[#F1F5F9]">
+                      {/* <div className="pt-4 border-t border-[#F1F5F9]">
                         <div className="text-[12px] text-[#6B7280] font-semibold uppercase tracking-wider mb-2">Seized Bottle Sizes</div>
                         <div className="space-y-2">
                           {bottleVarietyData.sizes.map((s) => (
@@ -1129,7 +1125,7 @@ export function UnifiedDashboard() {
                             </div>
                           ))}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
@@ -1186,7 +1182,7 @@ export function UnifiedDashboard() {
                   {/* Category & Type Share Breakdown */}
                   <div className="border border-[#E5E7EB] rounded-lg p-4 bg-white">
                     <h4 className="text-[14px] font-bold text-[#0F172A] mb-4">NDPS Drug Categories & Type Shares</h4>
-                    
+
                     <div className="space-y-4">
                       {/* Categories */}
                       <div>
@@ -1207,7 +1203,7 @@ export function UnifiedDashboard() {
                       </div>
 
                       {/* Types */}
-                      <div className="pt-4 border-t border-[#F1F5F9]">
+                      {/* <div className="pt-4 border-t border-[#F1F5F9]">
                         <div className="text-[12px] text-[#6B7280] font-semibold uppercase tracking-wider mb-2">Drug Class Distribution</div>
                         <div className="space-y-2">
                           {ndpsVarietyData.types.map((t) => (
@@ -1222,7 +1218,7 @@ export function UnifiedDashboard() {
                             </div>
                           ))}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
@@ -1279,7 +1275,7 @@ export function UnifiedDashboard() {
                   {/* Category & Type Share Breakdown */}
                   <div className="border border-[#E5E7EB] rounded-lg p-4 bg-white">
                     <h4 className="text-[14px] font-bold text-[#0F172A] mb-4">Gambling Categories & Type Shares</h4>
-                    
+
                     <div className="space-y-4">
                       {/* Categories */}
                       <div>
@@ -1300,7 +1296,7 @@ export function UnifiedDashboard() {
                       </div>
 
                       {/* Types */}
-                      <div className="pt-4 border-t border-[#F1F5F9]">
+                      {/* <div className="pt-4 border-t border-[#F1F5F9]">
                         <div className="text-[12px] text-[#6B7280] font-semibold uppercase tracking-wider mb-2">Gambling Class Distribution</div>
                         <div className="space-y-2">
                           {gamblingVarietyData.types.map((t) => (
@@ -1315,7 +1311,7 @@ export function UnifiedDashboard() {
                             </div>
                           ))}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
@@ -2163,7 +2159,7 @@ export function UnifiedDashboard() {
                 </svg>
 
                 {/* Hover Tooltip */}
-                 {hoveredDistrictData &&
+                {hoveredDistrictData &&
                   hoveredCrimeData &&
                   !selectedDistrict && (
                     <div className="absolute top-4 right-4 bg-white rounded-lg border border-[#E5E7EB] p-3 shadow-lg min-w-[200px] animate-in fade-in duration-200">
@@ -2258,21 +2254,19 @@ export function UnifiedDashboard() {
               {/* District Details Panel */}
               {selectedDistrictData && selectedCrimeData && (
                 <div className="space-y-4">
-                  <div className={`rounded-lg p-4 border transition-all ${
-                    filterMode === "ndps"
-                      ? "bg-[#FFFBEB] border-[#FDE68A]/30"
-                      : filterMode === "gambling"
-                        ? "bg-[#F5F3FF] border-[#DDD6FE]/30"
-                        : "bg-[#EFF6FF] border-[#3B82F6]/20"
-                  }`}>
+                  <div className={`rounded-lg p-4 border transition-all ${filterMode === "ndps"
+                    ? "bg-[#FFFBEB] border-[#FDE68A]/30"
+                    : filterMode === "gambling"
+                      ? "bg-[#F5F3FF] border-[#DDD6FE]/30"
+                      : "bg-[#EFF6FF] border-[#3B82F6]/20"
+                    }`}>
                     <div className="flex items-center gap-2 mb-3">
-                      <MapPin className={`w-5 h-5 ${
-                        filterMode === "ndps"
-                          ? "text-[#D97706]"
-                          : filterMode === "gambling"
-                            ? "text-[#4F46E5]"
-                            : "text-[#1D4ED8]"
-                      }`} />
+                      <MapPin className={`w-5 h-5 ${filterMode === "ndps"
+                        ? "text-[#D97706]"
+                        : filterMode === "gambling"
+                          ? "text-[#4F46E5]"
+                          : "text-[#1D4ED8]"
+                        }`} />
                       <h3 className="text-[18px] font-bold text-[#0F172A]">
                         {selectedDistrictData.name}
                       </h3>
